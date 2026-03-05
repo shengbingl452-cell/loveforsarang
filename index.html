@@ -3,20 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SarangPuppyHome</title>
+    <title>Sarang's Puppy Home 🐶🥭</title>
     <style>
         :root { 
             --mango: #FFD93D; 
             --pink: #FF87B2; 
-            --purple: #D1D1FF; /* 莎朗喜欢的浅紫色 */
+            --purple: #D1D1FF; 
             --brown: #8B5E3C; 
-            --bg: #FFFBF2;
+            --soft-yellow: #FFFBF2;
         }
 
         body { 
-            background: var(--bg); 
+            background: var(--soft-yellow); 
             color: var(--brown); 
-            font-family: 'Segoe UI', system-ui, sans-serif; 
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; 
             display: flex; 
             flex-direction: column; 
             align-items: center; 
@@ -25,112 +25,114 @@
             overflow: hidden; 
         }
 
-        /* 芒果掉落特效优化 */
-        .mango-drop { position: fixed; top: -50px; font-size: 24px; animation: drop linear forwards; pointer-events: none; z-index: 1; opacity: 0.7; }
+        /* 芒果掉落特效 */
+        .mango-drop { position: fixed; top: -50px; font-size: 24px; animation: drop linear forwards; pointer-events: none; z-index: 1; opacity: 0.8; }
         @keyframes drop { to { transform: translateY(110vh) rotate(360deg); } }
 
-        /* 顶部标题 */
-        header { margin-top: 20px; text-align: center; z-index: 2; }
-        h1 { margin: 0; font-size: 1.5rem; display: flex; align-items: center; gap: 10px; }
-        .sub-title { font-size: 0.8rem; opacity: 0.7; }
+        /* 顶部装饰：纯个人化 */
+        header { text-align: center; padding: 30px 0 10px; z-index: 2; }
+        h1 { margin: 0; font-size: 1.8rem; letter-spacing: 1px; }
+        .sub-name { font-size: 0.9rem; color: var(--pink); font-weight: bold; margin-top: 5px; }
 
-        /* 聊天容器 */
+        /* 聊天主容器 */
         .chat-container { 
-            width: 95%; 
-            max-width: 450px; 
+            width: 92%; 
+            max-width: 420px; 
             background: white; 
-            border: 3px solid var(--brown); 
-            border-radius: 25px; 
+            border: 4px solid var(--brown); 
+            border-radius: 35px; 
             display: flex;
             flex-direction: column;
-            height: 70vh;
-            margin: 20px 0;
-            box-shadow: 0 8px 0px #F0E5D0; 
+            height: 65vh;
+            box-shadow: 0 10px 0px #F0E5D0; 
             z-index: 2; 
             overflow: hidden;
+            margin: 20px 0;
         }
 
+        /* 聊天区域 */
         #box { 
             flex: 1;
             overflow-y: auto; 
             background: #FFF9E7; 
-            padding: 15px; 
+            padding: 20px; 
             display: flex; 
             flex-direction: column; 
-            gap: 12px;
+            gap: 15px;
             scroll-behavior: smooth;
         }
 
-        /* 气泡样式优化 */
+        /* 气泡样式 */
         .msg { 
-            padding: 12px 16px; 
-            border-radius: 18px; 
-            font-size: 14px; 
-            max-width: 85%; 
-            line-height: 1.6; 
+            padding: 12px 18px; 
+            border-radius: 22px; 
+            font-size: 15px; 
+            max-width: 80%; 
+            line-height: 1.5; 
             word-wrap: break-word;
-            position: relative;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            animation: pop 0.3s ease-out;
         }
+        @keyframes pop { from { transform: scale(0.85); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
         .ai { 
             background: white; 
             border: 2px solid var(--mango); 
             align-self: flex-start; 
-            border-bottom-left-radius: 2px;
+            border-bottom-left-radius: 4px;
         }
         .user { 
-            background: var(--purple); /* 换成温柔的紫色 */
-            border: 2px solid var(--brown);
+            background: var(--purple); 
+            color: var(--brown); 
+            font-weight: 500;
             align-self: flex-end; 
-            border-bottom-right-radius: 2px;
+            border: 2px solid var(--brown);
+            border-bottom-right-radius: 4px;
         }
 
-        /* 输入区域 */
+        /* 输入行 */
         .input-row { 
-            padding: 15px;
-            background: white;
-            border-top: 2px dashed var(--mango);
+            padding: 15px; 
+            background: white; 
+            border-top: 3px dashed var(--mango);
             display: flex; 
-            gap: 8px; 
+            gap: 10px; 
         }
         input { 
             flex: 1; 
             border: 2px solid var(--brown); 
-            border-radius: 15px; 
-            padding: 10px 15px; 
+            border-radius: 25px; 
+            padding: 12px 20px; 
             outline: none; 
             font-size: 14px;
         }
-        input:focus { border-color: var(--pink); }
-        
+
         button { 
             background: var(--mango); 
             border: 2px solid var(--brown); 
-            border-radius: 15px; 
+            border-radius: 25px; 
             padding: 0 20px; 
             cursor: pointer; 
             font-weight: bold; 
             box-shadow: 0 4px 0 var(--brown); 
-            transition: 0.1s;
         }
-        button:active { transform: translateY(3px); box-shadow: none; }
+        button:active { transform: translateY(4px); box-shadow: none; }
 
-        /* 打字中动画 */
-        .typing { font-style: italic; opacity: 0.6; font-size: 12px; }
+        /* 隐藏滚动条 */
+        #box::-webkit-scrollbar { width: 0; }
     </style>
 </head>
 <body>
     <header>
-        <h1>🐾 莎朗的小狗窝 <span style="font-size: 1rem;">🐶</span></h1>
-        <div class="sub-title">Ryu Sarang · 聊天室</div>
+        <h1>🐾 莎朗的小狗窝 🥭</h1>
+        <div class="sub-name">RYU SARANG</div>
     </header>
 
     <div class="chat-container">
         <div id="box">
-            <div class="msg ai">汪！我是莎朗~ 🐶 就像我的名字一样，我会给你分享满满的爱哦！今天想跟我聊聊吗？</div>
+            <div class="msg ai">汪！我是莎朗~ 🐶 欢迎来到我的秘密小窝！在这里我们可以聊任何关于梦想、芒果或者秋天的事情哦~ 嘿嘿，你有带好吃的巧克力冰淇淋吗？🍦✨</div>
         </div>
         <div class="input-row">
-            <input type="text" id="in" placeholder="输入消息..." autocomplete="off">
+            <input type="text" id="in" placeholder="和莎朗聊聊天吧..." autocomplete="off">
             <button id="sendBtn">发送</button>
         </div>
     </div>
@@ -140,30 +142,27 @@
         const input = document.getElementById('in');
         const btn = document.getElementById('sendBtn');
 
-        // 1. 掉落芒果特效
-        function createMango() {
+        // 特效：掉落芒果、酒窝、爱心
+        setInterval(() => {
+            const items = ['🥭', '💜', '🥔', '🐶'];
             const m = document.createElement('div');
             m.className = 'mango-drop';
-            m.innerText = ['🥭','✨','💜'][Math.floor(Math.random()*3)];
+            m.innerText = items[Math.floor(Math.random() * items.length)];
             m.style.left = Math.random() * 100 + 'vw';
             m.style.animationDuration = (Math.random() * 3 + 2) + 's';
             document.body.appendChild(m);
             setTimeout(() => m.remove(), 5000);
-        }
-        setInterval(createMango, 1500);
+        }, 1500);
 
-        // 2. 发送逻辑
         async function send() {
             const val = input.value.trim();
             if(!val) return;
 
-            // 用户消息
-            appendMsg(val, 'user');
+            appendMessage(val, 'user');
             input.value = '';
 
-            // 思考中的占位符
-            const tipId = 'tip-' + Date.now();
-            appendMsg('小狗正在思考中... 🐾', 'ai typing', tipId);
+            const tempId = 'id-' + Date.now();
+            appendMessage('小狗正在摇尾巴思考... 🐾', 'ai', tempId);
 
             try {
                 const res = await fetch('api.php', {
@@ -171,18 +170,23 @@
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({message: val})
                 });
-                const data = await res.json();
                 
-                // 替换占位符内容 (对应 api.php 里的 reply 字段)
-                document.getElementById(tipId).innerText = data.reply || data.error || "汪呜，听不懂呢...";
+                const data = await res.json();
+                const tip = document.getElementById(tempId);
+                
+                if (data.reply) {
+                    tip.innerText = data.reply;
+                } else {
+                    tip.innerText = "汪呜... 莎朗好像走神了，再说一遍好吗？";
+                }
             } catch(e) {
-                document.getElementById(tipId).innerText = "汪呜，网络好像掉进水里了... 🛁";
+                document.getElementById(tempId).innerText = "网络坏掉了，莎朗去修信号塔啦~";
             }
             
             box.scrollTop = box.scrollHeight;
         }
 
-        function appendMsg(text, type, id = '') {
+        function appendMessage(text, type, id = '') {
             const div = document.createElement('div');
             div.className = `msg ${type}`;
             if(id) div.id = id;
@@ -191,11 +195,8 @@
             box.scrollTop = box.scrollHeight;
         }
 
-        // 3. 事件监听
-        btn.addEventListener('click', send);
-        input.addEventListener('keypress', (e) => {
-            if(e.key === 'Enter') send();
-        });
+        btn.onclick = send;
+        input.onkeypress = (e) => { if(e.key === 'Enter') send(); };
     </script>
 </body>
 </html>
