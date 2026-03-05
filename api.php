@@ -12,7 +12,7 @@ if (empty($userMsg)) {
 }
 
 // 2. 配置 API（以标准 OpenAI/DeepSeek 格式为例）
-$apiKey = "YOUR_API_KEY_HERE"; // ⚠️ 在这里填入你的 API Key
+$apiKey = "sk-dc3744db8cf3475c8955dfa039a3f021"; // ⚠️ 在这里填入你的 API Key
 $apiUrl = "https://api.deepseek.com/chat/completions"; 
 
 $data = [
