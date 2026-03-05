@@ -6,7 +6,7 @@ header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Allow-Headers: Content-Type");
 
 // 2. 获取环境变量 (在 Render 后台设置的 KEY)
-$apiKey = getenv('sk-dc3744db8cf3475c8955dfa039a3f021'); 
+$apiKey = getenv('DEEPSEEK_API_KEY'); 
 // DeepSeek 标准 API 地址
 $apiUrl = 'https://api.deepseek.com/chat/completions'; 
 
