@@ -182,33 +182,42 @@
 
     <script>
         async function sendChat() {
-            const input = document.getElementById('userInput');
-            const box = document.getElementById('chatBox');
-            const text = input.value.trim();
-            
-            if (!text) return;
+    const input = document.getElementById('userInput');
+    const box = document.getElementById('chatBox');
+    const text = input.value.trim();
+    
+    if (!text) return;
 
-            // 添加用户消息
-            box.innerHTML += `<div class="msg user-msg">${text}</div>`;
-            input.value = '';
-            box.scrollTop = box.scrollHeight;
+    // 1. 在对话框显示用户的话
+    box.innerHTML += `<div class="msg user-msg">${text}</div>`;
+    input.value = ''; // 清空输入框
+    box.scrollTop = box.scrollHeight; // 滚动到底部
 
-            try {
-                // 调用你之前创建的 api.php
-                const res = await fetch('api.php', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ message: text })
-                });
-                const data = await res.json();
-                
-                // 添加 AI 消息
-                box.innerHTML += `<div class="msg ai-msg">${data.response || '汪呜...网络好像断了'}</div>`;
-            } catch (e) {
-                box.innerHTML += `<div class="msg ai-msg">汪呜，出错了！</div>`;
-            }
-            box.scrollTop = box.scrollHeight;
-        }
+    // 2. 显示“正在思考”状态
+    const loadingId = "loading-" + Date.now();
+    box.innerHTML += `<div class="msg ai-msg" id="${loadingId}">正在想怎么回复你... 🐾</div>`;
+
+    try {
+        // 3. 发起请求到 api.php
+        const res = await fetch('api.php', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ message: text })
+        });
+        
+        const data = await res.json();
+        
+        // 4. 移除加载提示，显示 AI 回复
+        document.getElementById(loadingId).remove();
+        box.innerHTML += `<div class="msg ai-msg">${data.response}</div>`;
+        
+    } catch (e) {
+        document.getElementById(loadingId).remove();
+        box.innerHTML += `<div class="msg ai-msg">汪呜，服务器打盹了，请稍后再试！</div>`;
+    }
+    
+    box.scrollTop = box.scrollHeight;
+}
     </script>
 </body>
 </html>
