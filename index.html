@@ -4,220 +4,75 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SarangPuppyHome 🐶🥭</title>
-    <link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Varela+Round&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
     <style>
-        :root {
-            --mango-yellow: #FFD93D;
-            --soft-pink: #FF87B2;
-            --cream-bg: #FFFBF2;
-            --puppy-brown: #8B5E3C;
-            --card-shadow: 0 10px 0px #F0E5D0;
-        }
+        :root { --mango: #FFD93D; --pink: #FF87B2; --brown: #8B5E3C; }
+        body { background: #FFFBF2; color: var(--brown); font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; min-height: 100vh; margin: 0; overflow-x: hidden; }
+        
+        /* 芒果掉落特效 */
+        .mango-drop { position: fixed; top: -50px; font-size: 24px; animation: drop linear forwards; pointer-events: none; z-index: 1; }
+        @keyframes drop { to { transform: translateY(110vh) rotate(360deg); } }
 
-        body {
-            background-color: var(--cream-bg);
-            background-image: radial-gradient(#FFD93D 1px, transparent 1px);
-            background-size: 20px 20px; /* 细腻的点点背景 */
-            font-family: 'Varela Round', 'ZCOOL KuaiLe', sans-serif;
-            color: var(--puppy-brown);
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+        .chat-container { width: 90%; max-width: 400px; background: white; border: 4px solid var(--brown); border-radius: 30px; padding: 20px; box-shadow: 0 10px 0px #F0E5D0; z-index: 2; margin-top: 40px; }
+        #box { height: 350px; overflow-y: auto; background: #FFF9E7; border-radius: 20px; padding: 15px; border: 2px dashed var(--mango); margin-bottom: 15px; display: flex; flex-direction: column; gap: 10px; }
+        .msg { padding: 10px 15px; border-radius: 15px; font-size: 14px; max-width: 80%; line-height: 1.5; }
+        .ai { background: #fff; border: 1px solid var(--mango); align-self: flex-start; }
+        .user { background: var(--pink); color: white; align-self: flex-end; }
 
-        /* 顶部装饰 */
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-            position: relative;
-        }
-
-        .header h1 {
-            font-size: 2.5rem;
-            margin: 10px 0;
-            color: var(--soft-pink);
-            text-shadow: 2px 2px 0px #fff;
-        }
-
-        /* 卡通 Bento 容器 */
-        .bento-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-            max-width: 500px;
-            width: 100%;
-        }
-
-        .kawaii-card {
-            background: white;
-            border: 3px solid var(--puppy-brown);
-            border-radius: 30px;
-            padding: 20px;
-            box-shadow: var(--card-shadow);
-            position: relative;
-            transition: transform 0.2s;
-        }
-
-        .kawaii-card:hover {
-            transform: translateY(-5px) rotate(2deg);
-        }
-
-        .full-width { grid-column: span 2; }
-
-        /* 元素装饰 */
-        .icon-float {
-            font-size: 2rem;
-            margin-bottom: 10px;
-            display: block;
-        }
-
-        /* 聊天区域美化 */
-        .chat-area {
-            height: 200px;
-            overflow-y: auto;
-            background: #FFF9E7;
-            border-radius: 20px;
-            padding: 15px;
-            margin-bottom: 15px;
-            border: 2px dashed var(--mango-yellow);
-        }
-
-        .msg {
-            margin: 8px 0;
-            padding: 10px 15px;
-            border-radius: 15px;
-            font-size: 0.9rem;
-            line-height: 1.4;
-        }
-        .ai-msg { background: white; border-radius: 20px 20px 20px 5px; border: 2px solid var(--mango-yellow); }
-        .user-msg { background: var(--soft-pink); color: white; border-radius: 20px 20px 5px 20px; margin-left: auto; width: fit-content; }
-
-        .input-group {
-            display: flex;
-            gap: 10px;
-        }
-
-        input {
-            flex: 1;
-            border: 2px solid var(--puppy-brown);
-            border-radius: 50px;
-            padding: 10px 20px;
-            outline: none;
-        }
-
-        button {
-            background: var(--mango-yellow);
-            border: 2px solid var(--puppy-brown);
-            border-radius: 50px;
-            padding: 10px 20px;
-            cursor: pointer;
-            font-weight: bold;
-            box-shadow: 0 4px 0px var(--puppy-brown);
-        }
-
-        button:active {
-            transform: translateY(4px);
-            box-shadow: none;
-        }
-
-        .footer-tag {
-            margin-top: 30px;
-            font-size: 0.8rem;
-            opacity: 0.7;
-        }
-
-        /* 芒果浮动小动画 */
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0px); }
-        }
-        .floating { animation: float 3s ease-in-out infinite; }
+        .input-row { display: flex; gap: 8px; }
+        input { flex: 1; border: 2px solid var(--brown); border-radius: 20px; padding: 12px; outline: none; }
+        button { background: var(--mango); border: 2px solid var(--brown); border-radius: 20px; padding: 10px 20px; cursor: pointer; font-weight: bold; box-shadow: 0 4px 0 var(--brown); }
+        button:active { transform: translateY(4px); box-shadow: none; }
     </style>
 </head>
 <body>
-
-    <div class="header">
-        <div class="floating" style="font-size: 3rem;">🥭</div>
-        <h1>莎朗的小狗窝</h1>
-        <p>SARANG'S MANGO HOUSE 🐾</p>
-    </div>
-
-    <div class="bento-grid">
-        <div class="kawaii-card full-width">
-            <span class="icon-float">🐶</span>
-            <h3 style="margin: 0;">关于莎朗</h3>
-            <p style="font-size: 0.9rem;">一个超级粘人的 INFP 小狗，最喜欢芒果和舞台！</p>
-        </div>
-
-        <div class="kawaii-card full-width">
-            <h3 style="margin-bottom: 10px;"><i class="fas fa-comment-dots"></i> 汪汪对话框</h3>
-            <div class="chat-area" id="chatBox">
-                <div class="msg ai-msg">汪！我是 AI 莎朗，今天给你带了芒果吗？🥭</div>
-            </div>
-            <div class="input-group">
-                <input type="text" id="userInput" placeholder="和莎朗聊天...">
-                <button onclick="sendChat()">发送</button>
-            </div>
-        </div>
-
-        <div class="kawaii-card">
-            <span class="icon-float">🍰</span>
-            <strong>幸运值</strong>
-            <div style="font-size: 1.5rem; color: var(--soft-pink);">100%</div>
-        </div>
-
-        <div class="kawaii-card">
-            <span class="icon-float">🐾</span>
-            <strong>今日心情</strong>
-            <div style="font-size: 1.2rem;">超级开心</div>
+    <h1 style="margin-top: 30px; font-size: 1.8rem;">🐾 莎朗的小狗窝 🥭</h1>
+    <div class="chat-container">
+        <div id="box"><div class="msg ai">汪！今天也想吃芒果吗？汪汪！🥭</div></div>
+        <div class="input-row">
+            <input type="text" id="in" placeholder="和莎朗聊天...">
+            <button onclick="send()">发送</button>
         </div>
     </div>
-
-    <div class="footer-tag">Made with ❤️ for Sarang</div>
 
     <script>
-        async function sendChat() {
-    const input = document.getElementById('userInput');
-    const box = document.getElementById('chatBox');
-    const text = input.value.trim();
-    
-    if (!text) return;
+        // 随机掉落芒果
+        setInterval(() => {
+            const m = document.createElement('div');
+            m.className = 'mango-drop';
+            m.innerText = '🥭';
+            m.style.left = Math.random() * 100 + 'vw';
+            m.style.animationDuration = (Math.random() * 3 + 2) + 's';
+            document.body.appendChild(m);
+            setTimeout(() => m.remove(), 5000);
+        }, 1000);
 
-    // 1. 在对话框显示用户的话
-    box.innerHTML += `<div class="msg user-msg">${text}</div>`;
-    input.value = ''; // 清空输入框
-    box.scrollTop = box.scrollHeight; // 滚动到底部
+        async function send() {
+            const input = document.getElementById('in');
+            const box = document.getElementById('box');
+            const val = input.value.trim();
+            if(!val) return;
 
-    // 2. 显示“正在思考”状态
-    const loadingId = "loading-" + Date.now();
-    box.innerHTML += `<div class="msg ai-msg" id="${loadingId}">正在想怎么回复你... 🐾</div>`;
+            box.innerHTML += `<div class="msg user">${val}</div>`;
+            input.value = '';
+            box.scrollTop = box.scrollHeight;
 
-    try {
-        // 3. 发起请求到 api.php
-        const res = await fetch('api.php', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ message: text })
-        });
-        
-        const data = await res.json();
-        
-        // 4. 移除加载提示，显示 AI 回复
-        document.getElementById(loadingId).remove();
-        box.innerHTML += `<div class="msg ai-msg">${data.response}</div>`;
-        
-    } catch (e) {
-        document.getElementById(loadingId).remove();
-        box.innerHTML += `<div class="msg ai-msg">汪呜，服务器打盹了，请稍后再试！</div>`;
-    }
-    
-    box.scrollTop = box.scrollHeight;
-}
+            const tip = document.createElement('div');
+            tip.className = 'msg ai'; tip.innerText = '小狗正在思考... 🐾';
+            box.appendChild(tip);
+
+            try {
+                const res = await fetch('api.php', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({message: val})
+                });
+                const data = await res.json();
+                tip.innerText = data.response;
+            } catch(e) {
+                tip.innerText = "汪呜，网络好像坏掉了。";
+            }
+            box.scrollTop = box.scrollHeight;
+        }
     </script>
 </body>
 </html>
