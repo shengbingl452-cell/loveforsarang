@@ -1,249 +1,214 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>柳莎朗 | RYU SARANG - Digital Archive</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700;900&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SarangPuppyHome 🐶🥭</title>
+    <link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Varela+Round&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
     <style>
         :root {
-            /* 现代高级感配色系统 */
-            --bg-color: #080a0f; 
-            --text-main: #f5f5f7; 
-            --text-sub: #86868b; 
-            --accent-gold: #d4af37; /* 经典金 */
-            --accent-blue: #0071e3; /* 科技蓝 */
-            --card-bg: rgba(255, 255, 255, 0.04);
-            --border-light: rgba(255, 255, 255, 0.1);
-            --transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+            --mango-yellow: #FFD93D;
+            --soft-pink: #FF87B2;
+            --cream-bg: #FFFBF2;
+            --puppy-brown: #8B5E3C;
+            --card-shadow: 0 10px 0px #F0E5D0;
         }
-
-        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            font-family: "Noto Sans SC", -apple-system, sans-serif;
-            line-height: 1.6;
-            background-image: 
-                radial-gradient(circle at 20% 20%, #1a2333 0%, transparent 40%),
-                radial-gradient(circle at 80% 80%, #151a24 0%, transparent 40%);
-            background-attachment: fixed;
-        }
-
-        /* 导航栏 */
-        nav {
-            padding: 20px 5%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            backdrop-filter: blur(20px);
-            background: rgba(8, 10, 15, 0.8);
-            border-bottom: 1px solid var(--border-light);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .brand {
-            font-family: "Noto Serif SC", serif;
-            font-weight: 900;
-            font-size: 1.4rem;
-            letter-spacing: 1px;
-            color: var(--accent-gold);
-        }
-
-        .status {
-            font-size: 0.75rem;
-            color: #4cd964;
-            padding: 4px 12px;
-            border-radius: 20px;
-            background: rgba(76, 217, 100, 0.1);
-            border: 1px solid rgba(76, 217, 100, 0.3);
-            text-transform: uppercase;
-        }
-
-        .container { max-width: 1100px; margin: 0 auto; padding: 40px 20px; }
-
-        header { text-align: center; margin-bottom: 60px; }
-        .tag { color: var(--accent-blue); letter-spacing: 6px; font-weight: 700; font-size: 0.8rem; margin-bottom: 15px; display: block; }
-        h1 { font-family: "Noto Serif SC", serif; font-size: clamp(2.5rem, 6vw, 4rem); font-weight: 900; margin-bottom: 15px; }
-        .subtitle { color: var(--text-sub); font-size: 1.1rem; }
-
-        /* Bento Grid 布局优化 */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            grid-auto-rows: minmax(160px, auto);
-            gap: 20px;
-        }
-
-        .card {
-            background: var(--card-bg);
-            padding: 30px;
-            border-radius: 24px;
-            border: 1px solid var(--border-light);
-            transition: var(--transition);
-            position: relative;
-            overflow: hidden;
+            background-color: var(--cream-bg);
+            background-image: radial-gradient(#FFD93D 1px, transparent 1px);
+            background-size: 20px 20px; /* 细腻的点点背景 */
+            font-family: 'Varela Round', 'ZCOOL KuaiLe', sans-serif;
+            color: var(--puppy-brown);
+            margin: 0;
+            padding: 20px;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
-            backdrop-filter: blur(10px);
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            background: rgba(255, 255, 255, 0.07);
-            border-color: var(--accent-gold);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-        }
-
-        .col-2 { grid-column: span 2; }
-        .row-2 { grid-row: span 2; }
-
-        .card-title {
-            font-size: 0.7rem;
-            color: var(--text-sub);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 15px;
-            display: flex;
             align-items: center;
-            gap: 8px;
         }
 
-        .card-title::before { content: ""; width: 4px; height: 4px; background: var(--accent-gold); border-radius: 50%; }
-
-        .big-data {
-            font-family: "Noto Serif SC", serif;
-            font-size: 3.5rem;
-            font-weight: 900;
-            color: var(--accent-gold);
-            line-height: 1;
+        /* 顶部装饰 */
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
         }
 
-        .desc { font-size: 0.95rem; color: var(--text-main); margin-top: 10px; opacity: 0.9; }
+        .header h1 {
+            font-size: 2.5rem;
+            margin: 10px 0;
+            color: var(--soft-pink);
+            text-shadow: 2px 2px 0px #fff;
+        }
 
-        /* 特殊卡片样式 */
-        .highlight-card { background: linear-gradient(135deg, #1a1c22 0%, #0d0f14 100%); }
-        .link-card { text-decoration: none; cursor: pointer; }
-        .link-card .arrow { position: absolute; top: 30px; right: 30px; color: var(--accent-gold); transition: 0.3s; }
-        .link-card:hover .arrow { transform: translate(5px, -5px); }
+        /* 卡通 Bento 容器 */
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            max-width: 500px;
+            width: 100%;
+        }
 
-        .btn-primary {
-            display: inline-block;
-            margin-top: 40px;
-            padding: 16px 40px;
-            background: var(--accent-gold);
-            color: #000;
-            text-decoration: none;
+        .kawaii-card {
+            background: white;
+            border: 3px solid var(--puppy-brown);
+            border-radius: 30px;
+            padding: 20px;
+            box-shadow: var(--card-shadow);
+            position: relative;
+            transition: transform 0.2s;
+        }
+
+        .kawaii-card:hover {
+            transform: translateY(-5px) rotate(2deg);
+        }
+
+        .full-width { grid-column: span 2; }
+
+        /* 元素装饰 */
+        .icon-float {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        /* 聊天区域美化 */
+        .chat-area {
+            height: 200px;
+            overflow-y: auto;
+            background: #FFF9E7;
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 2px dashed var(--mango-yellow);
+        }
+
+        .msg {
+            margin: 8px 0;
+            padding: 10px 15px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+        .ai-msg { background: white; border-radius: 20px 20px 20px 5px; border: 2px solid var(--mango-yellow); }
+        .user-msg { background: var(--soft-pink); color: white; border-radius: 20px 20px 5px 20px; margin-left: auto; width: fit-content; }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        input {
+            flex: 1;
+            border: 2px solid var(--puppy-brown);
             border-radius: 50px;
-            font-weight: 700;
-            transition: var(--transition);
+            padding: 10px 20px;
+            outline: none;
         }
 
-        .btn-primary:hover { transform: scale(1.05); box-shadow: 0 0 20px rgba(212, 175, 55, 0.4); }
-
-        footer { text-align: center; margin-top: 80px; color: var(--text-sub); font-size: 0.8rem; padding: 40px 0; border-top: 1px solid var(--border-light); }
-
-        @media (max-width: 768px) {
-            .grid { grid-template-columns: repeat(2, 1fr); }
-            .col-2 { grid-column: span 2; }
+        button {
+            background: var(--mango-yellow);
+            border: 2px solid var(--puppy-brown);
+            border-radius: 50px;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 4px 0px var(--puppy-brown);
         }
+
+        button:active {
+            transform: translateY(4px);
+            box-shadow: none;
+        }
+
+        .footer-tag {
+            margin-top: 30px;
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+
+        /* 芒果浮动小动画 */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        .floating { animation: float 3s ease-in-out infinite; }
     </style>
 </head>
 <body>
 
-    <nav>
-        <div class="brand">SARANG.LAB</div>
-        <div class="status">System Online</div>
-    </nav>
-
-    <div class="container">
-        <header>
-            <span class="tag">PERSONAL ARCHIVE</span>
-            <h1>柳莎朗 RYU SARANG</h1>
-            <p class="subtitle">璀璨星河 · 芒果甜心 · 全能 Ace 档案</p>
-        </header>
-
-        <div class="grid">
-            <div class="card col-2 row-2 highlight-card">
-                <div>
-                    <div class="card-title">Bio / 档案</div>
-                    <h2 style="font-size: 1.8rem; margin-bottom: 15px;">基本信息</h2>
-                    <div class="desc" style="line-height: 2;">
-                        <p><strong>生日：</strong>2007.04.18 (白羊座)</p>
-                        <p><strong>家乡：</strong>釜山广域市影岛区</p>
-                        <p><strong>MBTI：</strong>INFP (调停者)</p>
-                        <p><strong>昵称：</strong>柳小爱、跟屁虫、微笑土豆</p>
-                    </div>
-                </div>
-                <i class="fas fa-user-astronaut" style="position: absolute; bottom: 20px; right: 20px; font-size: 4rem; opacity: 0.05;"></i>
-            </div>
-
-            <a href="body.html" class="card col-2 link-card" style="background: linear-gradient(45deg, #0f172a, #1e293b);">
-                <div>
-                    <div class="card-title">Gallery / 影集</div>
-                    <h2>独家照片库</h2>
-                    <p class="desc" style="color: var(--text-sub);">收录珍贵瞬间与舞台记忆</p>
-                </div>
-                <i class="fas fa-arrow-up-right-from-square arrow"></i>
-            </a>
-
-            <div class="card">
-                <div class="card-title">Training / 练习</div>
-                <div class="big-data">2.3</div>
-                <p class="desc">Years Experience</p>
-            </div>
-
-            <div class="card">
-                <div class="card-title">Favorites / 偏好</div>
-                <div class="desc">
-                    <p><i class="fas fa-heart" style="color: #ff3b30;"></i> 浅紫色 & 天蓝</p>
-                    <p><i class="fas fa-ice-cream" style="color: var(--accent-gold);"></i> 芒果 & 巧克力</p>
-                </div>
-            </div>
-
-            <div class="card col-2 link-card" onclick="alert('AI 对话系统正在维护...')">
-                <div>
-                    <div class="card-title">AI Digital Twin</div>
-                    <h2>与莎朗对话</h2>
-                    <p class="desc">由 DeepSeek 驱动的数字分身</p>
-                </div>
-                <i class="fas fa-comment-dots" style="position: absolute; bottom: 20px; right: 20px; font-size: 3rem; opacity: 0.1;"></i>
-            </a>
-
-            <div class="card col-2">
-                <div class="card-title">Charming Points / 魅力</div>
-                <div class="desc">
-                    <p>• 脸颊两侧凹凹的甜蜜酒窝</p>
-                    <p>• 如小狗般粘人且热情的性格</p>
-                    <p>• 唱跳俱佳的练习生 ACE 实力</p>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-title">Mood / 心情</div>
-                <div class="big-data" style="font-size: 2.5rem;">100%</div>
-            </div>
-
-            <div class="card">
-                <div class="card-title">Luck / 幸运</div>
-                <div class="big-data" style="font-size: 2.5rem;">77</div>
-            </div>
-        </div>
-
-        <div style="text-align: center;">
-            <a href="body.html" class="btn-primary">探索更多内容</a>
-        </div>
-
-        <footer>
-            <p>© 2026 RYU SARANG ARCHIVE. ALL RIGHTS RESERVED.</p>
-        </footer>
+    <div class="header">
+        <div class="floating" style="font-size: 3rem;">🥭</div>
+        <h1>莎朗的小狗窝</h1>
+        <p>SARANG'S MANGO HOUSE 🐾</p>
     </div>
 
+    <div class="bento-grid">
+        <div class="kawaii-card full-width">
+            <span class="icon-float">🐶</span>
+            <h3 style="margin: 0;">关于莎朗</h3>
+            <p style="font-size: 0.9rem;">一个超级粘人的 INFP 小狗，最喜欢芒果和舞台！</p>
+        </div>
+
+        <div class="kawaii-card full-width">
+            <h3 style="margin-bottom: 10px;"><i class="fas fa-comment-dots"></i> 汪汪对话框</h3>
+            <div class="chat-area" id="chatBox">
+                <div class="msg ai-msg">汪！我是 AI 莎朗，今天给你带了芒果吗？🥭</div>
+            </div>
+            <div class="input-group">
+                <input type="text" id="userInput" placeholder="和莎朗聊天...">
+                <button onclick="sendChat()">发送</button>
+            </div>
+        </div>
+
+        <div class="kawaii-card">
+            <span class="icon-float">🍰</span>
+            <strong>幸运值</strong>
+            <div style="font-size: 1.5rem; color: var(--soft-pink);">100%</div>
+        </div>
+
+        <div class="kawaii-card">
+            <span class="icon-float">🐾</span>
+            <strong>今日心情</strong>
+            <div style="font-size: 1.2rem;">超级开心</div>
+        </div>
+    </div>
+
+    <div class="footer-tag">Made with ❤️ for Sarang</div>
+
+    <script>
+        async function sendChat() {
+            const input = document.getElementById('userInput');
+            const box = document.getElementById('chatBox');
+            const text = input.value.trim();
+            
+            if (!text) return;
+
+            // 添加用户消息
+            box.innerHTML += `<div class="msg user-msg">${text}</div>`;
+            input.value = '';
+            box.scrollTop = box.scrollHeight;
+
+            try {
+                // 调用你之前创建的 api.php
+                const res = await fetch('api.php', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ message: text })
+                });
+                const data = await res.json();
+                
+                // 添加 AI 消息
+                box.innerHTML += `<div class="msg ai-msg">${data.response || '汪呜...网络好像断了'}</div>`;
+            } catch (e) {
+                box.innerHTML += `<div class="msg ai-msg">汪呜，出错了！</div>`;
+            }
+            box.scrollTop = box.scrollHeight;
+        }
+    </script>
 </body>
 </html>
