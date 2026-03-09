@@ -16,6 +16,7 @@ if (empty($apiKey)) {
     exit;
 }
 
+
 // 3. 接收并解析前端数据
 $input = json_decode(file_get_contents("php://input"), true);
 $userMessage = $input['message'] ?? '';
