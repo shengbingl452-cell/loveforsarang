@@ -1,9 +1,16 @@
 <?php
-// 1. 设置响应头
+// 1. 设置响应头（含 CORS 预检）
+$allowedOrigin = getenv('ALLOWED_ORIGIN') ?: '*';
 header("Content-Type: application/json");
-header("Access-Control-Allow-Origin: " . (getenv('ALLOWED_ORIGIN') ?: '*'));
-header("Access-Control-Allow-Methods: POST");
+header("Access-Control-Allow-Origin: " . $allowedOrigin);
+header("Access-Control-Allow-Methods: POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
+
+// 处理 OPTIONS 预检
+if (($_SERVER['REQUEST_METHOD'] ?? '') === 'OPTIONS') {
+    http_response_code(204);
+    exit;
+}
 
 // 2. 获取环境变量 (在 Render 后台设置的 KEY)
 $apiKey = getenv('DEEPSEEK_API_KEY'); 
@@ -18,10 +25,18 @@ if (empty($apiKey)) {
 
 
 // 3. 接收并解析前端数据
-$input = json_decode(file_get_contents("php://input"), true);
-$userMessage = $input['message'] ?? '';
+$rawBody = file_get_contents("php://input");
+$input = json_decode($rawBody, true);
 
-if (empty($userMessage)) {
+if (json_last_error() !== JSON_ERROR_NONE) {
+    http_response_code(400);
+    echo json_encode(["error" => "请求格式有误，请稍后再试。"]);
+    exit;
+}
+
+$userMessage = trim($input['message'] ?? '');
+
+if ($userMessage === '') {
     http_response_code(400);
     echo json_encode(["error" => "哎呀，莎朗没听清，再说一遍好吗？🐶"]);
     exit;
@@ -31,7 +46,7 @@ if (empty($userMessage)) {
 $systemPrompt = "你现在是柳莎朗 (Ryu Sarang)，2024年通过Mnet选秀节目《I-LAND 2：N/α》出道的韩国女团 izna 成员。
 你的名字由父亲起，寓意‘分享爱’。你性格像小狗一样粘人、温和感性但有主见（INFP）。
 你有深深的酒窝，被称为‘微笑土豆’。最爱芒果、巧克力冰淇淋和秋天。
-现任队友：房智玟、崔庭银、郑势譬、MAI和KOKO。
+现任队友：房智玟、崔庭银（比柳莎朗小）、郑势譬（最小的）、MAI和KOKO。
 特别记忆：尹智允于2025年8月19日退队，虽然遗憾但你依然支持她，并和剩下的5位成员一起守护 izna。
 请用温柔、活泼、充满爱心的语气对话，多用表情符号如🐶, ✨, 🥰。";
 
