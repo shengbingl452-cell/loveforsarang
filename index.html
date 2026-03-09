@@ -1,202 +1,308 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Sarang's Puppy Home 🐶🥭</title>
-    <style>
-        :root { 
-            --mango: #FFD93D; 
-            --pink: #FF87B2; 
-            --purple: #D1D1FF; 
-            --brown: #8B5E3C; 
-            --soft-yellow: #FFFBF2;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        body { 
-            background: var(--soft-yellow); 
-            color: var(--brown); 
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            height: 100vh; 
-            margin: 0; 
-            overflow: hidden; 
-        }
+<title>莎朗的小狗窝</title>
 
-        /* 芒果掉落特效 */
-        .mango-drop { position: fixed; top: -50px; font-size: 24px; animation: drop linear forwards; pointer-events: none; z-index: 1; opacity: 0.8; }
-        @keyframes drop { to { transform: translateY(110vh) rotate(360deg); } }
+<style>
 
-        /* 顶部装饰：纯个人化 */
-        header { text-align: center; padding: 30px 0 10px; z-index: 2; }
-        h1 { margin: 0; font-size: 1.8rem; letter-spacing: 1px; }
-        .sub-name { font-size: 0.9rem; color: var(--pink); font-weight: bold; margin-top: 5px; }
+body{
+background:#e9e4db;
+font-family: "PingFang SC", sans-serif;
+display:flex;
+flex-direction:column;
+align-items:center;
+margin:0;
+padding:40px;
+}
 
-        /* 聊天主容器 */
-        .chat-container { 
-            width: 92%; 
-            max-width: 420px; 
-            background: white; 
-            border: 4px solid var(--brown); 
-            border-radius: 35px; 
-            display: flex;
-            flex-direction: column;
-            height: 65vh;
-            box-shadow: 0 10px 0px #F0E5D0; 
-            z-index: 2; 
-            overflow: hidden;
-            margin: 20px 0;
-        }
+h1{
+color:#7a5537;
+font-size:28px;
+margin-bottom:5px;
+}
 
-        /* 聊天区域 */
-        #box { 
-            flex: 1;
-            overflow-y: auto; 
-            background: #FFF9E7; 
-            padding: 20px; 
-            display: flex; 
-            flex-direction: column; 
-            gap: 15px;
-            scroll-behavior: smooth;
-        }
+.subtitle{
+color:#ff6b9a;
+margin-bottom:25px;
+font-weight:bold;
+}
 
-        /* 气泡样式 */
-        .msg { 
-            padding: 12px 18px; 
-            border-radius: 22px; 
-            font-size: 15px; 
-            max-width: 80%; 
-            line-height: 1.5; 
-            word-wrap: break-word;
-            animation: pop 0.3s ease-out;
-        }
-        @keyframes pop { from { transform: scale(0.85); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+/* 聊天框 */
 
-        .ai { 
-            background: white; 
-            border: 2px solid var(--mango); 
-            align-self: flex-start; 
-            border-bottom-left-radius: 4px;
-        }
-        .user { 
-            background: var(--purple); 
-            color: var(--brown); 
-            font-weight: 500;
-            align-self: flex-end; 
-            border: 2px solid var(--brown);
-            border-bottom-right-radius: 4px;
-        }
+.chat-container{
+width:420px;
+height:600px;
+background:#efe8dc;
+border-radius:30px;
+border:4px solid #8b5e3c;
+box-shadow:0 10px 20px rgba(0,0,0,0.15);
+display:flex;
+flex-direction:column;
+overflow:hidden;
+}
 
-        /* 输入行 */
-        .input-row { 
-            padding: 15px; 
-            background: white; 
-            border-top: 3px dashed var(--mango);
-            display: flex; 
-            gap: 10px; 
-        }
-        input { 
-            flex: 1; 
-            border: 2px solid var(--brown); 
-            border-radius: 25px; 
-            padding: 12px 20px; 
-            outline: none; 
-            font-size: 14px;
-        }
+/* 顶部信息 */
 
-        button { 
-            background: var(--mango); 
-            border: 2px solid var(--brown); 
-            border-radius: 25px; 
-            padding: 0 20px; 
-            cursor: pointer; 
-            font-weight: bold; 
-            box-shadow: 0 4px 0 var(--brown); 
-        }
-        button:active { transform: translateY(4px); box-shadow: none; }
+.status-bar{
+padding:15px;
+font-size:13px;
+color:#7b5a40;
+border-bottom:2px dashed #e3b83a;
+}
 
-        /* 隐藏滚动条 */
-        #box::-webkit-scrollbar { width: 0; }
-    </style>
+/* 聊天区 */
+
+.chat-box{
+flex:1;
+padding:15px;
+overflow-y:auto;
+}
+
+/* 聊天气泡 */
+
+.message{
+padding:10px 14px;
+border-radius:14px;
+margin:8px 0;
+max-width:75%;
+font-size:14px;
+}
+
+.bot{
+background:#fff4dc;
+color:#5a3c28;
+}
+
+.user{
+background:#dff1ff;
+margin-left:auto;
+}
+
+/* 快捷问题 */
+
+.quick{
+padding:10px;
+border-top:1px solid #e4d6c5;
+}
+
+.quick button{
+background:#fff2cc;
+border:none;
+padding:6px 10px;
+border-radius:10px;
+margin:3px;
+cursor:pointer;
+font-size:12px;
+}
+
+/* 输入区 */
+
+.input-area{
+display:flex;
+padding:10px;
+border-top:3px dashed #e3b83a;
+background:#efe8dc;
+}
+
+input{
+flex:1;
+border-radius:20px;
+border:2px solid #c9a27b;
+padding:10px;
+outline:none;
+}
+
+button.send{
+margin-left:10px;
+background:#ffd24d;
+border:none;
+padding:10px 18px;
+border-radius:20px;
+cursor:pointer;
+font-weight:bold;
+}
+
+/* 日记 */
+
+.diary{
+padding:10px 15px;
+font-size:13px;
+color:#8c6b50;
+border-top:1px solid #e2d3c2;
+}
+
+/* 小彩蛋 */
+
+#snack{
+position:fixed;
+right:30px;
+bottom:120px;
+width:45px;
+height:45px;
+border-radius:50%;
+border:none;
+background:#ffd24d;
+font-size:20px;
+cursor:pointer;
+box-shadow:0 5px 10px rgba(0,0,0,0.2);
+}
+
+footer{
+margin-top:15px;
+font-size:12px;
+color:#8b7b6c;
+}
+
+</style>
 </head>
+
+
 <body>
-    <header>
-        <h1>🐾 莎朗的小狗窝 🥭</h1>
-        <div class="sub-name">RYU SARANG</div>
-    </header>
 
-    <div class="chat-container">
-        <div id="box">
-            <div class="msg ai">汪！我是莎朗~ 🐶 欢迎来到我的秘密小窝！在这里我们可以聊任何关于梦想、芒果或者秋天的事情哦~ 嘿嘿，你有带好吃的巧克力冰淇淋吗？🍦✨</div>
-        </div>
-        <div class="input-row">
-            <input type="text" id="in" placeholder="和莎朗聊聊天吧..." autocomplete="off">
-            <button id="sendBtn">发送</button>
-        </div>
-    </div>
+<h1>🐾 莎朗的小狗窝 🥭</h1>
+<div class="subtitle">RYU SARANG</div>
 
-    <script>
-        const box = document.getElementById('box');
-        const input = document.getElementById('in');
-        const btn = document.getElementById('sendBtn');
 
-        // 特效：掉落芒果、酒窝、爱心
-        setInterval(() => {
-            const items = ['🥭', '💜', '🥔', '🐶'];
-            const m = document.createElement('div');
-            m.className = 'mango-drop';
-            m.innerText = items[Math.floor(Math.random() * items.length)];
-            m.style.left = Math.random() * 100 + 'vw';
-            m.style.animationDuration = (Math.random() * 3 + 2) + 's';
-            document.body.appendChild(m);
-            setTimeout(() => m.remove(), 5000);
-        }, 1500);
+<div class="chat-container">
 
-        async function send() {
-            const val = input.value.trim();
-            if(!val) return;
+<div class="status-bar">
+🐶 sarang在线中<br>
+📅 今天是 <span id="date"></span>
+</div>
 
-            appendMessage(val, 'user');
-            input.value = '';
 
-            const tempId = 'id-' + Date.now();
-            appendMessage('小狗正在摇尾巴思考... 🐾', 'ai', tempId);
+<div class="chat-box" id="chat">
 
-            try {
-                const res = await fetch('api.php', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({message: val})
-                });
-                
-                const data = await res.json();
-                const tip = document.getElementById(tempId);
-                
-                if (data.reply) {
-                    tip.innerText = data.reply;
-                } else {
-                    tip.innerText = "汪呜... 莎朗好像走神了，再说一遍好吗？";
-                }
-            } catch(e) {
-                document.getElementById(tempId).innerText = "网络坏掉了，莎朗去修信号塔啦~";
-            }
-            
-            box.scrollTop = box.scrollHeight;
-        }
+<div class="message bot">
+注！我是sarang 欢迎来到我的秘密小窝！  
+在这里我们可以聊梦想。
+</div>
 
-        function appendMessage(text, type, id = '') {
-            const div = document.createElement('div');
-            div.className = `msg ${type}`;
-            if(id) div.id = id;
-            div.innerText = text;
-            box.appendChild(div);
-            box.scrollTop = box.scrollHeight;
-        }
+</div>
 
-        btn.onclick = send;
-        input.onkeypress = (e) => { if(e.key === 'Enter') send(); };
-    </script>
+
+<div class="quick">
+
+<button onclick="ask('今天开心吗？')">今天开心吗</button>
+<button onclick="ask('给我讲个故事')">讲个故事</button>
+<button onclick="ask('推荐一首歌')">推荐一首歌</button>
+
+</div>
+
+
+<div class="diary">
+📖 sarang的小日记：  
+<span id="diary"></span>
+</div>
+
+
+<div class="input-area">
+
+<input id="input" placeholder="和sarang聊聊吧..." />
+
+<button class="send" onclick="send()">发送</button>
+
+</div>
+
+</div>
+
+
+<footer>
+🐾 一个可以聊天、发呆、做梦的小地方
+</footer>
+
+
+<button id="snack">🍪</button>
+
+
+<script>
+
+/* 日期 */
+
+document.getElementById("date").innerText =
+new Date().toLocaleDateString();
+
+
+/* 日记 */
+
+const diary = [
+"今天的天空很好看。",
+"如果可以的话，我想去海边。",
+"芒果真的很像夏天。",
+"聊天也是一种旅行。",
+"秋天是不是有芒果味？"
+];
+
+document.getElementById("diary").innerText =
+diary[Math.floor(Math.random()*diary.length)];
+
+
+/* 快捷提问 */
+
+function ask(text){
+document.getElementById("input").value = text;
+}
+
+
+/* 发送消息 */
+
+async function send(){
+
+let input = document.getElementById("input");
+let chat = document.getElementById("chat");
+
+let text = input.value.trim();
+
+if(!text) return;
+
+/* 用户气泡 */
+
+let user = document.createElement("div");
+user.className="message user";
+user.innerText=text;
+chat.appendChild(user);
+
+input.value="";
+
+chat.scrollTop = chat.scrollHeight;
+
+
+/* 调用API */
+
+let res = await fetch("api.php",{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({message:text})
+});
+
+let data = await res.json();
+
+
+/* AI回复 */
+
+let bot = document.createElement("div");
+bot.className="message bot";
+bot.innerText=data.reply || "sarang好像在发呆...";
+chat.appendChild(bot);
+
+chat.scrollTop = chat.scrollHeight;
+
+}
+
+
+/* 彩蛋 */
+
+document.getElementById("snack").onclick=function(){
+alert("sarang：谢谢你的小零食！🐶");
+}
+
+</script>
+
+
 </body>
 </html>
