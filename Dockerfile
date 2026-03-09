@@ -6,7 +6,8 @@ RUN apt-get update && apt-get install -y \
     libcurl4-openssl-dev \
     pkg-config \
     libssl-dev \
-    && docker-php-ext-install curl
+    && docker-php-ext-install curl \
+    && rm -rf /var/lib/apt/lists/*
 
 # 2. 启用 Apache 的 rewrite 模块（对很多 PHP 框架和路由很有用）
 RUN a2enmod rewrite

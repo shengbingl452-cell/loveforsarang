@@ -2,6 +2,6 @@
     "name": "sarang-ai-web",
     "description": "PHP backend for Sarang AI",
     "require": {
-        "php": ">=7.4"
+        "php": "^8.2"
     }
 }

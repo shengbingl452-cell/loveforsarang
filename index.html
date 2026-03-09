@@ -272,6 +272,9 @@ chat.scrollTop = chat.scrollHeight;
 
 /* 调用API */
 
+let data;
+
+try {
 let res = await fetch("api.php",{
 method:"POST",
 headers:{
@@ -280,7 +283,15 @@ headers:{
 body:JSON.stringify({message:text})
 });
 
-let data = await res.json();
+if(!res.ok){
+throw new Error("请求失败：" + res.status);
+}
+
+data = await res.json();
+} catch (e) {
+data = { reply: "网络有点不稳定，请稍后再试一次哦 🐶" };
+console.error(e);
+}
 
 
 /* AI回复 */

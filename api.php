@@ -1,7 +1,7 @@
 <?php
 // 1. 设置响应头
 header("Content-Type: application/json");
-header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Origin: " . (getenv('ALLOWED_ORIGIN') ?: '*'));
 header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Allow-Headers: Content-Type");
 
@@ -10,11 +10,18 @@ $apiKey = getenv('DEEPSEEK_API_KEY');
 // DeepSeek 标准 API 地址
 $apiUrl = 'https://api.deepseek.com/chat/completions'; 
 
+if (empty($apiKey)) {
+    http_response_code(500);
+    echo json_encode(["error" => "服务配置异常：缺少 API KEY"]);
+    exit;
+}
+
 // 3. 接收并解析前端数据
 $input = json_decode(file_get_contents("php://input"), true);
 $userMessage = $input['message'] ?? '';
 
 if (empty($userMessage)) {
+    http_response_code(400);
     echo json_encode(["error" => "哎呀，莎朗没听清，再说一遍好吗？🐶"]);
     exit;
 }
@@ -47,18 +54,32 @@ curl_setopt($ch, CURLOPT_HTTPHEADER, [
     "Content-Type: application/json",
     "Authorization: Bearer " . $apiKey
 ]);
+curl_setopt($ch, CURLOPT_TIMEOUT, 30);
 
 $response = curl_exec($ch);
 $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
 if (curl_errno($ch)) {
+    http_response_code(502);
     echo json_encode(["error" => "连接失败: " . curl_error($ch)]);
 } elseif ($httpCode !== 200) {
-    echo json_encode(["error" => "DeepSeek 返回错误", "code" => $httpCode, "raw" => json_decode($response)]);
+    http_response_code($httpCode);
+    error_log("DeepSeek error ({$httpCode}): " . $response);
+    echo json_encode(["error" => "DeepSeek 返回错误", "code" => $httpCode]);
 } else {
     $responseData = json_decode($response, true);
+    $reply = $responseData['choices'][0]['message']['content'] ?? null;
+
+    if ($reply === null) {
+        http_response_code(502);
+        error_log("DeepSeek invalid response: " . $response);
+        echo json_encode(["error" => "上游响应格式异常"]);
+        curl_close($ch);
+        exit;
+    }
+
     echo json_encode([
-        "reply" => $responseData['choices'][0]['message']['content']
+        "reply" => $reply
     ]);
 }
 
