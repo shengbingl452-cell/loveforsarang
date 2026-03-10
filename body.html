@@ -238,6 +238,35 @@
         }
     }
 </script>
+<script src="menu.js"></script>
+
+<script>
+function pickFood() {
+    const display = document.getElementById('food-display');
+    const btn = document.querySelector('.pick-btn');
+    
+    // 1. 按钮点击效果
+    btn.style.transform = "scale(0.9)";
+    setTimeout(() => btn.style.transform = "scale(1)", 100);
+
+    // 2. 模拟“快速翻找”的滚动效果（增加互动感）
+    let count = 0;
+    const timer = setInterval(() => {
+        const randomTemp = myMenu[Math.floor(Math.random() * myMenu.length)];
+        display.innerText = randomTemp;
+        display.style.opacity = "0.5";
+        count++;
+        
+        if (count > 10) { // 滚动10次后停止
+            clearInterval(timer);
+            const finalChoice = myMenu[Math.floor(Math.random() * myMenu.length)];
+            display.innerText = "🌟 " + finalChoice + " 🌟";
+            display.style.opacity = "1";
+            display.classList.add('food-pop'); // 触发之前写好的弹出动画
+        }
+    }, 50);
+}
+</script>
 <a href="javascript:history.back()" class="back-btn" title="返回上一页">
     <span class="back-icon">👈</span>
     <span class="back-text">回去</span>
