@@ -196,6 +196,37 @@ cursor:pointer;
 box-shadow:0 5px 10px rgba(0,0,0,0.2);
 }
 
+
+
+.entry-card{
+display:block;
+width:420px;
+margin-bottom:16px;
+background:#fff4dc;
+border:3px solid #c9a27b;
+border-radius:18px;
+padding:12px 14px;
+text-decoration:none;
+color:#5a3c28;
+box-shadow:0 6px 12px rgba(0,0,0,.12);
+transition:transform .15s ease, box-shadow .15s ease;
+}
+
+.entry-card:hover{
+transform:translateY(-2px);
+box-shadow:0 10px 16px rgba(0,0,0,.15);
+}
+
+.entry-title{
+font-size:16px;
+font-weight:700;
+}
+
+.entry-desc{
+font-size:13px;
+margin-top:6px;
+}
+
 footer{
 margin-top:15px;
 font-size:12px;
@@ -210,6 +241,12 @@ color:#8b7b6c;
 
 <h1>🐾 莎朗的小狗窝 🥭</h1>
 <div class="subtitle">RYU SARANG</div>
+
+
+<a class="entry-card" href="body.html">
+<div class="entry-title">🧸 进入莎朗的小天地</div>
+<div class="entry-desc">点击这里跳转到 body.html，查看独立内容页</div>
+</a>
 
 
 <div class="chat-container">
@@ -349,6 +386,7 @@ function clearChat(){
   scrollToBottom();
 }
 
+ ours
 clearBtn.addEventListener("click", clearChat);
 inputEl.addEventListener("keydown", e => {
   if (e.key === "Enter" && !e.shiftKey) {
@@ -358,6 +396,28 @@ inputEl.addEventListener("keydown", e => {
 });
 
 loadHistory();
+
+let data;
+
+try {
+let res = await fetch("api.php",{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({message:text})
+});
+
+if(!res.ok){
+throw new Error("请求失败：" + res.status);
+}
+
+data = await res.json();
+} catch (e) {
+data = { reply: "网络有点不稳定，请稍后再试一次哦 🐶" };
+console.error(e);
+}
+theirs
 
 /* 发送消息 */
 
