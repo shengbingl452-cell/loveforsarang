@@ -19,6 +19,15 @@
 
         .container { width: min(100%, 450px); }
 
+        /* 语言切换 */
+        .lang-switch { margin: 0 0 15px; display: flex; gap: 8px; }
+        .lang-switch button {
+            background: #fff; border: 2px solid var(--main-brown); border-radius: 8px;
+            padding: 4px 12px; cursor: pointer; font-family: inherit; font-size: 12px;
+            transition: 0.2s;
+        }
+        .lang-switch button:hover { background: #ffd24d; }
+
         /* 卡片样式 */
         .paper-card {
             background: #fff; border: 3px solid var(--main-brown);
@@ -61,12 +70,18 @@
 <body>
 
 <div class="container">
-    <div style="margin-bottom: 20px;"><a href="index.html" style="text-decoration:none; color:var(--main-brown);">👈 返回</a></div>
+    <div style="margin-bottom: 12px;"><a href="index.html" id="back-home" style="text-decoration:none; color:var(--main-brown);">👈 返回</a></div>
+
+    <div class="lang-switch">
+        <button onclick="changeLang('en')">English</button>
+        <button onclick="changeLang('ko')">한국어</button>
+        <button onclick="changeLang('zh')">中文</button>
+    </div>
 
     <div class="paper-card">
-        <h2 style="margin-top:0;">📸 云端照片墙</h2>
+        <h2 id="gallery-title" style="margin-top:0;">📸 云端照片墙</h2>
         <input type="file" id="fileInput" hidden accept="image/*">
-        <button class="upload-btn" onclick="document.getElementById('fileInput').click()">点击投稿 ✉️</button>
+        <button class="upload-btn" id="upload-btn" onclick="document.getElementById('fileInput').click()">点击投稿 ✉️</button>
         <p id="status" style="font-size:12px; margin-top:10px;"></p>
     </div>
 
@@ -90,12 +105,58 @@
 <script>
     const fileInput = document.getElementById('fileInput');
     const status = document.getElementById('status');
+    const i18n = {
+        zh: {
+            title: "莎朗的云端相册 ☁️",
+            back: "👈 返回",
+            gallery_title: "📸 云端照片墙",
+            upload_btn: "点击投稿 ✉️",
+            uploading: "🚀 正在存入云端...",
+            success: "✅ 投稿成功！刷新中...",
+            fail: "❌ 失败: {msg}",
+            error: "❌ 报错了，检查 PHP 环境"
+        },
+        en: {
+            title: "Sarang's Cloud Album ☁️",
+            back: "👈 Back",
+            gallery_title: "📸 Cloud Photo Wall",
+            upload_btn: "Upload ✉️",
+            uploading: "🚀 Uploading...",
+            success: "✅ Success! Refreshing...",
+            fail: "❌ Failed: {msg}",
+            error: "❌ Error, check PHP environment"
+        },
+        ko: {
+            title: "사랑이의 클라우드 앨범 ☁️",
+            back: "👈 돌아가기",
+            gallery_title: "📸 클라우드 사진벽",
+            upload_btn: "업로드 ✉️",
+            uploading: "🚀 업로드 중...",
+            success: "✅ 성공! 새로고침 중...",
+            fail: "❌ 실패: {msg}",
+            error: "❌ 오류 발생, PHP 환경 확인"
+        }
+    };
+
+    let currentLang = localStorage.getItem('pref-lang') || 'zh';
+
+    function changeLang(lang) {
+        currentLang = lang;
+        localStorage.setItem('pref-lang', lang);
+        const t = i18n[lang];
+        document.documentElement.lang = lang === 'zh' ? 'zh-CN' : lang;
+        document.title = t.title;
+        document.getElementById('back-home').innerText = t.back;
+        document.getElementById('gallery-title').innerText = t.gallery_title;
+        document.getElementById('upload-btn').innerText = t.upload_btn;
+    }
 
     fileInput.onchange = async function() {
         const file = this.files[0];
         if (!file) return;
 
-        status.innerText = "🚀 正在存入云端...";
+        const t = i18n[currentLang];
+        status.innerText = t.uploading;
         const formData = new FormData();
         formData.append('photo', file);
 
@@ -103,13 +164,13 @@
             const res = await fetch('upload.php', { method: 'POST', body: formData });
             const data = await res.json();
             if (data.status === 'success') {
-                status.innerText = "✅ 投稿成功！刷新中...";
+                status.innerText = t.success;
                 setTimeout(() => location.reload(), 800);
             } else {
-                status.innerText = "❌ 失败: " + data.message;
+                status.innerText = t.fail.replace('{msg}', data.message);
             }
         } catch (err) {
-            status.innerText = "❌ 报错了，检查 PHP 环境";
+            status.innerText = t.error;
         }
     };
 
@@ -119,6 +180,8 @@
         fullImg.src = el.querySelector('img').src;
         overlay.style.display = 'flex';
     }
+
+    changeLang(currentLang);
 </script>
 
 </body>

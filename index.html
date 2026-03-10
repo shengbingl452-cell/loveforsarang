@@ -73,22 +73,24 @@ h1 { font-size: 32px; margin-bottom: 5px; text-shadow: 2px 2px 0px #fff; }
 
 /* 桌面宠物 */
 #pet-wrapper { position: fixed; bottom: 90px; right: 20px; z-index: 999; display: flex; flex-direction: column; align-items: center; pointer-events: none; }
-#pet-container { pointer-events: auto; cursor: pointer; transition: transform 0.3s; }
-/* 找到 .pet-bubble 并修改 */
+#pet-container { pointer-events: auto; cursor: pointer; transition: transform 0.3s; position: relative; }
+/* 气泡跟随宠物位置 */
 .pet-bubble {
     background: white;
     border: 3px solid var(--border-color);
     border-radius: 15px;
     padding: 5px 10px;
-    margin-bottom: 15px; /* 增大间距，给气泡留出空间 */
+    margin-bottom: 15px;
     font-size: 12px;
     opacity: 0;
     transition: opacity 0.3s;
     white-space: nowrap;
-    
-    /* 核心修改：确保气泡永远在最上层 */
-    position: relative;
-    z-index: 10; 
+    pointer-events: none;
+    position: absolute;
+    bottom: 110px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
 }
 
 /* 确保容器内的图片层级较低 */
@@ -152,8 +154,8 @@ h1 { font-size: 32px; margin-bottom: 5px; text-shadow: 2px 2px 0px #fff; }
 <div class="diary-box">📖 <b id="diary-label">莎朗的小日记：</b> <span id="diary">...</span></div>
 
 <div id="pet-wrapper">
-    <div id="pet-speech" class="pet-bubble">Zzz...</div>
     <div id="pet-container" class="float-ani">
+        <div id="pet-speech" class="pet-bubble">Zzz...</div>
         <img id="pet-img" src="assets/pet-idle.png" alt="Sarang">
     </div>
 </div>
@@ -164,9 +166,66 @@ h1 { font-size: 32px; margin-bottom: 5px; text-shadow: 2px 2px 0px #fff; }
 <script>
 // --- 语言包 ---
 const i18n = {
-    'zh': { title: "🐾 莎朗的小狗窝 🥭", subtitle: "RYU SARANG", entry1_t: "🧸 秘密天地", entry1_d: "去看看我的歌单和点菜机！", entry2_t: "📸 瞬间记录", entry2_d: "这里存着莎朗亮晶晶的回忆~", status: "🐶 Sarang 正在想你...", clear: "清空", welcome: "汪！我是 Sarang 🐾 <br>欢迎来到我的秘密小窝！", input_p: "和 Sarang 聊聊吧...", send: "发送", diary_l: "莎朗的小日记：", pet_touch: ["汪！好舒服~", "摸摸头真开心✨", "最喜欢你了！"], pet_eat: "吧唧吧唧... 超级好吃！🍪", pet_sleep: "Zzz... 呼...", pet_listen: "嗯嗯，在听呢..." },
-    'en': { title: "🐾 Sarang's Den 🥭", subtitle: "RYU SARANG", entry1_t: "🧸 Secret Space", entry1_d: "Check my playlist and menu!", entry2_t: "📸 Moments", entry2_d: "Bright memories of Sarang~", status: "🐶 Sarang is thinking of you...", clear: "Clear", welcome: "Woof! I'm Sarang 🐾 <br>Welcome to my secret den!", input_p: "Chat with Sarang...", send: "Send", diary_l: "Sarang's Diary:", pet_touch: ["Woof! Feels good~", "Petting me? ✨", "I love you!"], pet_eat: "Munch munch... Best cookie! 🍪", pet_sleep: "Zzz... Hooo...", pet_listen: "Hmm, I'm listening..." },
-    'ko': { title: "🐾 사랑이의 작은 방 🥭", subtitle: "류사랑 (RYU SARANG)", entry1_t: "🧸 비밀 공간", entry1_d: "나의 플레이리스트와 메뉴를 봐봐!", entry2_t: "📸 순간의 기록", entry2_d: "사랑이의 반짝이는 추억들~", status: "🐶 사랑이가 당신을 생각 중...", clear: "지우기", welcome: "멍멍! 나는 사랑이야 🐾 <br>나의 비밀 아지트에 온 걸 환영해!", input_p: "사랑이랑 대화하자...", send: "전송", diary_l: "사랑이의 일기:", pet_touch: ["멍멍! 기분 좋아~", "지금 나 쓰다듬는 거야? ✨", "네가 제일 좋아!"], pet_eat: "냠냠... 진짜 맛있다! 🍪", pet_sleep: "쿨쿨... 드렁...", pet_listen: "응응, 듣고 있어..." }
+    'zh': {
+        title: "🐾 莎朗的小狗窝 🥭",
+        subtitle: "RYU SARANG",
+        entry1_t: "🧸 秘密天地",
+        entry1_d: "去看看我的歌单和点菜机！",
+        entry2_t: "📸 瞬间记录",
+        entry2_d: "这里存着莎朗亮晶晶的回忆~",
+        status: "🐶 Sarang 正在想你...",
+        clear: "清空",
+        welcome: "汪！我是 Sarang 🐾 <br>欢迎来到我的秘密小窝！",
+        input_p: "和 Sarang 聊聊吧...",
+        send: "发送",
+        diary_l: "莎朗的小日记：",
+        diaries: ["今天天空很好看。", "想去海边。", "芒果味夏天。"],
+        error: "Sarang 出错了...",
+        pet_touch: ["汪！好舒服~", "摸摸头真开心✨", "最喜欢你了！"],
+        pet_eat: "吧唧吧唧... 超级好吃！🍪",
+        pet_sleep: "Zzz... 呼...",
+        pet_listen: "嗯嗯，在听呢..."
+    },
+    'en': {
+        title: "🐾 Sarang's Den 🥭",
+        subtitle: "RYU SARANG",
+        entry1_t: "🧸 Secret Space",
+        entry1_d: "Check my playlist and menu!",
+        entry2_t: "📸 Moments",
+        entry2_d: "Bright memories of Sarang~",
+        status: "🐶 Sarang is thinking of you...",
+        clear: "Clear",
+        welcome: "Woof! I'm Sarang 🐾 <br>Welcome to my secret den!",
+        input_p: "Chat with Sarang...",
+        send: "Send",
+        diary_l: "Sarang's Diary:",
+        diaries: ["The sky looks lovely today.", "I want to go to the sea.", "Mango-flavored summer."],
+        error: "Sarang error...",
+        pet_touch: ["Woof! Feels good~", "Petting me? ✨", "I love you!"],
+        pet_eat: "Munch munch... Best cookie! 🍪",
+        pet_sleep: "Zzz... Hooo...",
+        pet_listen: "Hmm, I'm listening..."
+    },
+    'ko': {
+        title: "🐾 사랑이의 작은 방 🥭",
+        subtitle: "류사랑 (RYU SARANG)",
+        entry1_t: "🧸 비밀 공간",
+        entry1_d: "나의 플레이리스트와 메뉴를 봐봐!",
+        entry2_t: "📸 순간의 기록",
+        entry2_d: "사랑이의 반짝이는 추억들~",
+        status: "🐶 사랑이가 당신을 생각 중...",
+        clear: "지우기",
+        welcome: "멍멍! 나는 사랑이야 🐾 <br>나의 비밀 아지트에 온 걸 환영해!",
+        input_p: "사랑이랑 대화하자...",
+        send: "전송",
+        diary_l: "사랑이의 일기:",
+        diaries: ["오늘 하늘이 참 예뻐.", "바다에 가고 싶어.", "망고맛 여름."],
+        error: "사랑이 오류...",
+        pet_touch: ["멍멍! 기분 좋아~", "지금 나 쓰다듬는 거야? ✨", "네가 제일 좋아!"],
+        pet_eat: "냠냠... 진짜 맛있다! 🍪",
+        pet_sleep: "쿨쿨... 드렁...",
+        pet_listen: "응응, 듣고 있어..."
+    }
 };
 
 let currentLang = localStorage.getItem('pref-lang') || 'zh';
@@ -177,6 +236,8 @@ let idleTimer;
 function changeLang(lang) {
     currentLang = lang; localStorage.setItem('pref-lang', lang);
     const t = i18n[lang];
+    document.documentElement.lang = lang === 'zh' ? 'zh-CN' : lang;
+    document.title = t.title;
     document.getElementById('main-title').innerText = t.title;
     document.getElementById('main-subtitle').innerText = t.subtitle;
     document.getElementById('entry1-t').innerText = t.entry1_t;
@@ -189,6 +250,10 @@ function changeLang(lang) {
     document.querySelectorAll('.send')[0].innerText = t.send;
     document.getElementById('diary-label').innerText = t.diary_l;
     chatEl.innerHTML = `<div class="message bot">${t.welcome}</div>`;
+    const diaryList = t.diaries || [];
+    if (diaryList.length > 0) {
+        document.getElementById("diary").innerText = diaryList[Math.floor(Math.random() * diaryList.length)];
+    }
 }
 
 // --- 宠物逻辑 ---
@@ -246,7 +311,7 @@ async function send() {
     try {
         let res = await fetch("api.php", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ message: text }) });
         let data = await res.json(); appendMsg("bot", data.reply || "...");
-    } catch (e) { appendMsg("bot", "Sarang error..."); }
+    } catch (e) { appendMsg("bot", i18n[currentLang].error); }
     startIdleTimer();
 }
 
@@ -255,8 +320,6 @@ function appendMsg(role, text) {
     chatEl.appendChild(div); chatEl.scrollTop = chatEl.scrollHeight;
 }
 
-const diaries = ["今天天空很好看。", "想去海边。", "芒果味夏天。"];
-document.getElementById("diary").innerText = diaries[Math.floor(Math.random()*diaries.length)];
 document.getElementById("clearBtn").onclick = () => { chatEl.innerHTML = ""; };
 inputEl.onkeydown = (e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(); } };
 

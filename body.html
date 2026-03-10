@@ -60,6 +60,15 @@
 
         .back-home:active { transform: translate(2px, 2px); box-shadow: 0 0 0; }
 
+        /* 语言切换 */
+        .lang-switch { margin: 0 0 15px; display: flex; gap: 8px; }
+        .lang-switch button {
+            background: #fff; border: 2px solid var(--main-brown); border-radius: 8px;
+            padding: 4px 12px; cursor: pointer; font-family: inherit; font-size: 12px;
+            transition: 0.2s;
+        }
+        .lang-switch button:hover { background: var(--accent-yellow); }
+
         /* 卡片基础样式 */
         .paper-card {
             background: #fff;
@@ -185,27 +194,33 @@
 
 <div class="container">
     <div class="nav-header">
-        <a href="index.html" class="back-home">🐾 返回窝里</a>
+        <a href="index.html" class="back-home" id="back-home">🐾 返回窝里</a>
+    </div>
+
+    <div class="lang-switch">
+        <button onclick="changeLang('en')">English</button>
+        <button onclick="changeLang('ko')">한국어</button>
+        <button onclick="changeLang('zh')">中文</button>
     </div>
 
     <div class="paper-card" style="text-align: center;">
-        <h2>🍱 랑menu</h2>
+        <h2 id="menu-title">🍱 랑menu</h2>
         <div class="slot-machine" id="food-box">想吃什么呀？</div>
-        <button class="btn-magic" onclick="rollFood()">给我变！✨</button>
+        <button class="btn-magic" id="menu-btn" onclick="rollFood()">给我变！✨</button>
     </div>
 
     <div class="paper-card">
-        <h2 style="background: #a2d2ff;">🎵 音乐补给站</h2>
+        <h2 id="music-title" style="background: #a2d2ff;">🎵 音乐补给站</h2>
         <div class="playlist-row">
-            <a href="http://t.cn/AXcCNzoH" target="_blank" class="music-tag">🟢 QQ 音乐</a>
-            <a href="https://163cn.tv/2izY3UE" target="_blank" class="music-tag">🔴 网易云</a>
-            <a href="http://t.cn/AXcCD6ez" target="_blank" class="music-tag">🍎 Apple</a>
-            <a href="https://open.spotify.com/playlist/2pTSSNGXUBUWeGqq6Ljy8E?si=lGt_FnFXQIOnQAsgcL1Z8g&pi=swsS0j2uRD2dP" target="_blank" class="music-tag">🍏 Spotify</a>
+            <a href="http://t.cn/AXcCNzoH" target="_blank" class="music-tag" id="music-qq">🟢 QQ 音乐</a>
+            <a href="https://163cn.tv/2izY3UE" target="_blank" class="music-tag" id="music-netease">🔴 网易云</a>
+            <a href="http://t.cn/AXcCD6ez" target="_blank" class="music-tag" id="music-apple">🍎 Apple</a>
+            <a href="https://open.spotify.com/playlist/2pTSSNGXUBUWeGqq6Ljy8E?si=lGt_FnFXQIOnQAsgcL1Z8g&pi=swsS0j2uRD2dP" target="_blank" class="music-tag" id="music-spotify">🍏 Spotify</a>
         </div>
     </div>
 
     <div class="paper-card">
-        <h2 style="background: #cdb4db;">☁️ 今日云心情</h2>
+        <h2 id="mood-title" style="background: #cdb4db;">☁️ 今日云心情</h2>
         <div class="mood-grid">
             <span class="mood-item" onclick="setMood(this)">😊</span>
             <span class="mood-item" onclick="setMood(this)">😐</span>
@@ -215,24 +230,93 @@
         <p id="mood-info" style="text-align:center; font-size:12px; color:#8b7b6c; margin-top:15px;"></p>
     </div>
 
-    <div class="mini-mark">DESIGNED BY SARANG 🐾</div>
+    <div class="mini-mark" id="mini-mark">DESIGNED BY SARANG 🐾</div>
 </div>
 
 <script src="menu.js"></script>
 
 <script>
+    const i18n = {
+        zh: {
+            title: "莎朗的秘密基地 🥭",
+            back: "🐾 返回窝里",
+            menu_title: "🍱 랑menu",
+            menu_placeholder: "想吃什么呀？",
+            menu_btn: "给我变！✨",
+            music_title: "🎵 音乐补给站",
+            music_qq: "🟢 QQ 音乐",
+            music_netease: "🔴 网易云",
+            music_apple: "🍎 Apple",
+            music_spotify: "🍏 Spotify",
+            mood_title: "☁️ 今日云心情",
+            mood_info: "捕捉成功！打卡时间：{time}",
+            mark: "DESIGNED BY SARANG 🐾"
+        },
+        en: {
+            title: "Sarang's Secret Base 🥭",
+            back: "🐾 Back to Home",
+            menu_title: "🍱 Rang Menu",
+            menu_placeholder: "What do you want to eat?",
+            menu_btn: "Magic! ✨",
+            music_title: "🎵 Music Station",
+            music_qq: "🟢 QQ Music",
+            music_netease: "🔴 NetEase",
+            music_apple: "🍎 Apple",
+            music_spotify: "🍏 Spotify",
+            mood_title: "☁️ Today's Mood",
+            mood_info: "Captured! Time: {time}",
+            mark: "DESIGNED BY SARANG 🐾"
+        },
+        ko: {
+            title: "사랑이의 비밀기지 🥭",
+            back: "🐾 집으로 돌아가기",
+            menu_title: "🍱 랑menu",
+            menu_placeholder: "뭐 먹고 싶어?",
+            menu_btn: "변신! ✨",
+            music_title: "🎵 음악 보급소",
+            music_qq: "🟢 QQ 음악",
+            music_netease: "🔴 넷이즈",
+            music_apple: "🍎 Apple",
+            music_spotify: "🍏 Spotify",
+            mood_title: "☁️ 오늘의 기분",
+            mood_info: "기록 성공! 시간: {time}",
+            mark: "DESIGNED BY SARANG 🐾"
+        }
+    };
+
+    let currentLang = localStorage.getItem('pref-lang') || 'zh';
+
+    function changeLang(lang) {
+        currentLang = lang;
+        localStorage.setItem('pref-lang', lang);
+        const t = i18n[lang];
+        document.documentElement.lang = lang === 'zh' ? 'zh-CN' : lang;
+        document.title = t.title;
+        document.getElementById('back-home').innerText = t.back;
+        document.getElementById('menu-title').innerText = t.menu_title;
+        document.getElementById('food-box').innerText = t.menu_placeholder;
+        document.getElementById('menu-btn').innerText = t.menu_btn;
+        document.getElementById('music-title').innerText = t.music_title;
+        document.getElementById('music-qq').innerText = t.music_qq;
+        document.getElementById('music-netease').innerText = t.music_netease;
+        document.getElementById('music-apple').innerText = t.music_apple;
+        document.getElementById('music-spotify').innerText = t.music_spotify;
+        document.getElementById('mood-title').innerText = t.mood_title;
+        document.getElementById('mini-mark').innerText = t.mark;
+    }
+
     // 点菜逻辑
     function rollFood() {
         const box = document.getElementById('food-box');
         box.classList.remove('bounce-in');
-        
+        const list = getMenuList(currentLang);
         let i = 0;
         const interval = setInterval(() => {
-            box.innerText = myMenu[Math.floor(Math.random() * myMenu.length)];
+            box.innerText = list[Math.floor(Math.random() * list.length)];
             i++;
             if(i > 10) {
                 clearInterval(interval);
-                const final = myMenu[Math.floor(Math.random() * myMenu.length)];
+                const final = list[Math.floor(Math.random() * list.length)];
                 box.innerHTML = `✨ ${final} ✨`;
                 box.classList.add('bounce-in');
             }
@@ -244,8 +328,11 @@
         document.querySelectorAll('.mood-item').forEach(m => m.classList.remove('active'));
         el.classList.add('active');
         const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-        document.getElementById('mood-info').innerText = `捕捉成功！打卡时间：${time}`;
+        const t = i18n[currentLang];
+        document.getElementById('mood-info').innerText = t.mood_info.replace('{time}', time);
     }
+
+    changeLang(currentLang);
 </script>
 
 </body>

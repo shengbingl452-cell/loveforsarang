@@ -1,4 +1,4 @@
-const myMenu = [
+const baseMenu = [
     "排骨汤", "方鱼", "炒鸡蛋", "薄煎饼培根豆", "冷面", "猪排", 
     "秋尾乌冬面", "巧克力香蕉华夫饼", "草莓蛋糕", "寿司", 
     "便利店鱼饼", "火鸡味土豆饼干", "巧克力饼干", "酸奶软糖", 
@@ -16,3 +16,13 @@ const myMenu = [
     "番茄奶油炖鸡拌饭", "草莓巧克力糯米糕", "鱼饼", 
     "鱿鱼辣椒酱加蛋黄酱", "干菜大酱汤", "年糕串", "海鲜面"
 ];
+
+const menuByLang = {
+    zh: baseMenu,
+    en: baseMenu,
+    ko: baseMenu
+};
+
+function getMenuList(lang) {
+    return menuByLang[lang] || menuByLang.zh;
+}
