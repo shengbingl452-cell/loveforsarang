@@ -332,16 +332,12 @@ const defaultIntroHTML = chatEl.innerHTML;
 const sendBtn = document.querySelector("button.send");
 const clearBtn = document.getElementById("clearBtn");
 
-document.getElementById("input").addEventListener("keydown", function(e){
-if(e.key === "Enter"){
-e.preventDefault();
-send();
-}
+inputEl.addEventListener("keydown", e => {
+  if (e.key === "Enter" && !e.shiftKey) {
+    e.preventDefault();
+    send();
+  }
 });
-
-function scrollToBottom(){
-  chatEl.scrollTop = chatEl.scrollHeight;
-}
 
 function saveHistory(){
   const messages = Array.from(chatEl.querySelectorAll(".message")).map(el => ({
@@ -388,17 +384,6 @@ function clearChat(){
   saveHistory();
   scrollToBottom();
 }
-
-clearBtn.addEventListener("click", clearChat);
-inputEl.addEventListener("keydown", e => {
-  if (e.key === "Enter" && !e.shiftKey) {
-    e.preventDefault();
-    send();
-  }
-});
-
-loadHistory();
-
 
 
 /* 发送消息 */
