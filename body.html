@@ -6,7 +6,19 @@
     <title>Sarang 的卡通音乐屋</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&display=swap');
-
+        .mini-watermark {
+        position: fixed;
+        bottom: 10px;        /* 距离底部 10px */
+        right: 15px;         /* 距离右侧 15px */
+        font-size: 10px;     /* 字号设置得很小 */
+        color: #7a5537;      /* 使用你全局的棕色调 */
+        opacity: 0.3;        /* 关键：设置 30% 的透明度，若隐若现 */
+        pointer-events: none; /* 确保水印不影响鼠标点击下层内容 */
+        letter-spacing: 1px;
+        font-family: sans-serif; /* 使用系统简洁字体增强可读性 */
+        user-select: none;   /* 防止用户误选文字 */
+        z-index: 9999;       /* 确保在最顶层 */
+        }
         :root {
             --main-brown: #5d4037;
             --soft-yellow: #fff9e6;
@@ -270,6 +282,8 @@
         .back-btn { padding: 8px 12px; font-size: 0.9em; }
     }
 </style>
-
+<div class="mini-watermark">
+    allforsarang ---特别致谢onlysarangu🐾
+</div>
 </body>
 </html>
