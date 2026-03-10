@@ -3,172 +3,248 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sarang 的秘密天地</title>
+    <title>莎朗的秘密基地 🥭</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&display=swap');
+
         :root {
             --main-brown: #7a5537;
-            --soft-yellow: #fff9e6;
+            --soft-yellow: #fdf6e3;
             --accent-pink: #ff8fb1;
-            --border-thick: 3px solid var(--main-brown);
+            --accent-yellow: #ffd24d;
+            --bg-dots: #d1c9bc;
         }
 
         body {
-            background-color: var(--soft-yellow);
-            font-family: 'PingFang SC', sans-serif;
+            background-color: #e9e4db;
+            background-image: radial-gradient(var(--bg-dots) 1px, transparent 1px);
+            background-size: 20px 20px;
+            font-family: 'ZCOOL KuaiLe', "PingFang SC", sans-serif;
             margin: 0;
             padding: 20px;
             color: var(--main-brown);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         .container {
-            max-width: 450px;
-            margin: 0 auto;
+            width: min(100%, 420px);
+            animation: fadeIn 0.6s ease-out;
         }
 
-        /* 返回键样式 */
-        .back-nav { margin-bottom: 20px; }
-        .back-link {
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 顶部导航 */
+        .nav-header {
+            width: 100%;
+            display: flex;
+            justify-content: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .back-home {
             text-decoration: none;
+            background: #fff;
+            border: 3px solid var(--main-brown);
+            padding: 5px 15px;
+            border-radius: 20px;
             color: var(--main-brown);
             font-weight: bold;
-            background: #fff;
-            padding: 8px 15px;
-            border: var(--border-thick);
-            border-radius: 50px;
-            box-shadow: 4px 4px 0 var(--main-brown);
-            display: inline-block;
+            box-shadow: 4px 4px 0px var(--main-brown);
+            transition: 0.2s;
         }
 
-        /* 卡片通用样式 */
-        .card {
-            background: white;
-            border: var(--border-thick);
-            border-radius: 25px;
+        .back-home:active { transform: translate(2px, 2px); box-shadow: 0 0 0; }
+
+        /* 卡片基础样式 */
+        .paper-card {
+            background: #fff;
+            border: 4px solid var(--main-brown);
+            border-radius: 30px;
             padding: 20px;
             margin-bottom: 25px;
-            box-shadow: 6px 6px 0 var(--main-brown);
+            box-shadow: 8px 8px 0px rgba(122, 85, 55, 0.1);
+            position: relative;
         }
 
-        h2 { font-size: 1.2rem; margin-top: 0; }
+        h2 {
+            text-align: center;
+            font-size: 22px;
+            margin-top: 0;
+            margin-bottom: 15px;
+            background: var(--accent-yellow);
+            display: inline-block;
+            padding: 2px 12px;
+            border-radius: 10px;
+            transform: rotate(-2deg);
+        }
 
-        /* 点菜区动画 */
-        .food-slot {
-            background: #fdf6e3;
-            border: 2px dashed var(--main-brown);
-            border-radius: 15px;
-            height: 80px;
+        /* 随机点菜区 */
+        .slot-machine {
+            background: #fffbeb;
+            border: 3px dashed var(--main-brown);
+            border-radius: 20px;
+            height: 90px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 22px;
-            font-weight: bold;
-            color: #e67e22;
-            margin-bottom: 15px;
-            overflow: hidden;
+            font-size: 24px;
+            color: #ff6b9a;
+            margin: 15px 0;
+            text-align: center;
+            padding: 0 10px;
         }
 
-        .btn-pick {
+        .btn-magic {
             width: 100%;
             background: var(--accent-pink);
             color: white;
-            border: var(--border-thick);
+            border: 3px solid var(--main-brown);
             padding: 12px;
-            border-radius: 15px;
-            font-size: 1.1rem;
-            font-weight: bold;
+            border-radius: 20px;
+            font-size: 18px;
+            font-family: inherit;
             cursor: pointer;
-            box-shadow: 0 4px 0 var(--main-brown);
+            box-shadow: 0 5px 0 var(--main-brown);
             transition: 0.1s;
         }
-        .btn-pick:active { transform: translateY(4px); box-shadow: 0 0 0 var(--main-brown); }
 
-        /* 歌单网格 */
-        .music-grid {
+        .btn-magic:active { transform: translateY(4px); box-shadow: 0 0 0; }
+
+        /* 歌单列表 */
+        .playlist-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 10px;
+            gap: 12px;
         }
-        .music-item {
+
+        .music-tag {
+            background: #fff;
             border: 2px solid var(--main-brown);
-            border-radius: 12px;
-            padding: 10px;
+            border-radius: 15px;
+            padding: 8px;
             text-decoration: none;
             color: var(--main-brown);
             text-align: center;
             font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
         }
 
-        /* 简单动画 */
-        .pop { animation: popScale 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        @keyframes popScale {
-            0% { transform: scale(0.7); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
+        .music-tag:hover { background: var(--soft-yellow); }
+
+        /* 心情区域 */
+        .mood-grid {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 10px;
         }
 
-        .watermark {
+        .mood-item {
+            font-size: 30px;
+            cursor: pointer;
+            transition: transform 0.2s;
+            filter: grayscale(100%);
+            opacity: 0.5;
+        }
+
+        .mood-item.active {
+            filter: grayscale(0);
+            opacity: 1;
+            transform: scale(1.3);
+        }
+
+        /* 水印 */
+        .mini-mark {
             text-align: center;
             font-size: 10px;
-            opacity: 0.2;
-            margin-top: 30px;
+            opacity: 0.3;
+            margin-top: 20px;
+            letter-spacing: 2px;
+        }
+
+        /* 动画类 */
+        .bounce-in {
+            animation: bounceIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0.3); opacity: 0; }
+            70% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="back-nav">
-        <a href="index.html" class="back-link">👈 返回小窝</a>
+    <div class="nav-header">
+        <a href="index.html" class="back-home">🐾 返回窝里</a>
     </div>
 
-    <div class="card">
-        <h2>🍱 莎朗的点名时间</h2>
-        <div class="food-slot" id="food-result">今天吃什么？</div>
-        <button class="btn-pick" onclick="startRolling()">✨ 随机点菜</button>
+    <div class="paper-card" style="text-align: center;">
+        <h2>🍱 莎朗点菜</h2>
+        <div class="slot-machine" id="food-box">想吃什么呀？</div>
+        <button class="btn-magic" onclick="rollFood()">给我变！✨</button>
     </div>
 
-    <div class="card">
-        <h2>🎵 收藏歌单</h2>
-        <div class="music-grid">
-            <a href="http://t.cn/AXcCNzoH" target="_blank" class="music-item">QQ 音乐</a>
-            <a href="https://163cn.tv/2izY3UE" target="_blank" class="music-item">网易云</a>
-            <a href="http://t.cn/AXcCD6ez" target="_blank" class="music-item">Apple</a>
-            <a href="http://t.cn/AXcCFypr" target="_blank" class="music-item">Spotify</a>
+    <div class="paper-card">
+        <h2 style="background: #a2d2ff;">🎵 音乐补给站</h2>
+        <div class="playlist-row">
+            <a href="http://t.cn/AXcCNzoH" target="_blank" class="music-tag">🟢 QQ 音乐</a>
+            <a href="https://163cn.tv/2izY3UE" target="_blank" class="music-tag">🔴 网易云</a>
+            <a href="http://t.cn/AXcCD6ez" target="_blank" class="music-tag">🍎 Apple</a>
+            <a href="http://t.cn/AXcCFypr" target="_blank" class="music-tag">🍏 Spotify</a>
         </div>
     </div>
 
-    <div class="watermark">Designed by Sarang 🐾</div>
+    <div class="paper-card">
+        <h2 style="background: #cdb4db;">☁️ 今日云心情</h2>
+        <div class="mood-grid">
+            <span class="mood-item" onclick="setMood(this)">😊</span>
+            <span class="mood-item" onclick="setMood(this)">😐</span>
+            <span class="mood-item" onclick="setMood(this)">😴</span>
+            <span class="mood-item" onclick="setMood(this)">🔥</span>
+        </div>
+        <p id="mood-info" style="text-align:center; font-size:12px; color:#8b7b6c; margin-top:15px;"></p>
+    </div>
+
+    <div class="mini-mark">DESIGNED BY SARANG 🐾</div>
 </div>
 
 <script src="menu.js"></script>
 
 <script>
-    let isRolling = false;
-
-    function startRolling() {
-        if (isRolling) return;
-        isRolling = true;
+    // 点菜逻辑
+    function rollFood() {
+        const box = document.getElementById('food-box');
+        box.classList.remove('bounce-in');
         
-        const display = document.getElementById('food-result');
-        display.classList.remove('pop');
-        
-        let count = 0;
-        const maxScroll = 12; // 滚动次数
-
-        const timer = setInterval(() => {
-            // 从引入的 myMenu 数组中随机取值
-            const randomIndex = Math.floor(Math.random() * myMenu.length);
-            display.innerText = myMenu[randomIndex];
-            count++;
-
-            if (count >= maxScroll) {
-                clearInterval(timer);
-                isRolling = false;
-                // 最终结果
-                const finalIndex = Math.floor(Math.random() * myMenu.length);
-                display.innerHTML = "🌟 " + myMenu[finalIndex] + " 🌟";
-                display.classList.add('pop'); // 触发弹出动画
+        let i = 0;
+        const interval = setInterval(() => {
+            box.innerText = myMenu[Math.floor(Math.random() * myMenu.length)];
+            i++;
+            if(i > 10) {
+                clearInterval(interval);
+                const final = myMenu[Math.floor(Math.random() * myMenu.length)];
+                box.innerHTML = `✨ ${final} ✨`;
+                box.classList.add('bounce-in');
             }
         }, 60);
+    }
+
+    // 心情逻辑
+    function setMood(el) {
+        document.querySelectorAll('.mood-item').forEach(m => m.classList.remove('active'));
+        el.classList.add('active');
+        const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        document.getElementById('mood-info').innerText = `捕捉成功！打卡时间：${time}`;
     }
 </script>
 
