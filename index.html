@@ -10,16 +10,19 @@
 @import url('https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&display=swap');
 .mini-watermark {
     position: fixed;
-    bottom: 10px;        /* 距离底部 10px */
-    right: 15px;         /* 距离右侧 15px */
-    font-size: 10px;     /* 字号设置得很小 */
-    color: #7a5537;      /* 使用你全局的棕色调 */
-    opacity: 0.3;        /* 关键：设置 30% 的透明度，若隐若现 */
-    pointer-events: none; /* 确保水印不影响鼠标点击下层内容 */
-    letter-spacing: 1px;
-    font-family: sans-serif; /* 使用系统简洁字体增强可读性 */
-    user-select: none;   /* 防止用户误选文字 */
-    z-index: 9999;       /* 确保在最顶层 */
+    bottom: 8px;           /* 距离底部非常近 */
+    left: 50%;             /* 移动到屏幕水平中心 */
+    transform: translateX(-50%); /* 完美的几何居中偏移 */
+    
+    font-size: 9px;        /* 极小字号 */
+    color: #7a5537;
+    opacity: 0.2;          /* 20% 透明度，非常隐蔽 */
+    
+    letter-spacing: 2px;   /* 增加字间距，更有设计感 */
+    white-space: nowrap;   /* 防止换行 */
+    pointer-events: none;  /* 鼠标点不中它，不影响操作 */
+    user-select: none;     /* 无法被选中复制 */
+    z-index: 9999;
 }
 :root {
     --border-color: #7a5537;
