@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>莎朗的照片墙 🥭</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&display=swap');
+
+        :root {
+            --main-brown: #7a5537;
+            --soft-yellow: #fdf6e3;
+            --accent-pink: #ff8fb1;
+            --bg-dots: #d1c9bc;
+        }
+
+        body {
+            background-color: #e9e4db;
+            background-image: radial-gradient(var(--bg-dots) 1px, transparent 1px);
+            background-size: 20px 20px;
+            font-family: 'ZCOOL KuaiLe', sans-serif;
+            margin: 0;
+            padding: 20px;
+            color: var(--main-brown);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            width: min(100%, 450px);
+        }
+
+        /* 顶部导航 */
+        .nav-header {
+            width: 100%;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .back-btn {
+            text-decoration: none;
+            background: #fff;
+            border: 3px solid var(--main-brown);
+            padding: 6px 15px;
+            border-radius: 20px;
+            color: var(--main-brown);
+            font-weight: bold;
+            box-shadow: 4px 4px 0px var(--main-brown);
+        }
+
+        /* 照片墙容器 */
+        .photo-wall {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            padding: 10px;
+        }
+
+        /* 拍立得单张样式 */
+        .polaroid {
+            background: #fff;
+            padding: 10px 10px 25px 10px;
+            border: 3px solid var(--main-brown);
+            box-shadow: 6px 6px 0px rgba(122, 85, 55, 0.1);
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* 胶带装饰 */
+        .polaroid::before {
+            content: '';
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 15px;
+            background: rgba(255, 210, 77, 0.6); /* 半透明黄色胶带 */
+            border: 1px solid rgba(122, 85, 55, 0.2);
+        }
+
+        .polaroid img {
+            width: 100%;
+            height: 130px;
+            object-fit: cover;
+            border: 2px solid var(--main-brown);
+            display: block;
+        }
+
+        .caption {
+            text-align: center;
+            font-size: 14px;
+            margin-top: 10px;
+            color: var(--main-brown);
+        }
+
+        /* 随机倾斜效果 */
+        .polaroid:nth-child(odd) { transform: rotate(-3deg); }
+        .polaroid:nth-child(even) { transform: rotate(3deg); }
+
+        .polaroid:hover {
+            transform: rotate(0deg) scale(1.1);
+            z-index: 10;
+            box-shadow: 10px 10px 0px var(--accent-pink);
+        }
+
+        /* 查看大图遮罩层 */
+        .overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            cursor: zoom-out;
+        }
+
+        .overlay img {
+            max-width: 90%;
+            max-height: 80%;
+            border: 5px solid white;
+            border-radius: 10px;
+        }
+
+        .watermark {
+            text-align: center;
+            font-size: 10px;
+            opacity: 0.3;
+            margin-top: 40px;
+            letter-spacing: 2px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="nav-header">
+        <a href="body.html" class="back-btn">👈 返回天地</a>
+        <h2 style="margin:0;">📸 瞬间记录</h2>
+    </div>
+
+    <div class="photo-wall">
+        <div class="polaroid" onclick="openFull(this)">
+            <img src="https://picsum.photos/400/400?random=1" alt="照片1">
+            <div class="caption">好心情 🌸</div>
+        </div>
+
+        <div class="polaroid" onclick="openFull(this)">
+            <img src="https://picsum.photos/400/400?random=2" alt="照片2">
+            <div class="caption">今日份芒果 🥭</div>
+        </div>
+
+        <div class="polaroid" onclick="openFull(this)">
+            <img src="https://picsum.photos/400/400?random=3" alt="照片3">
+            <div class="caption">秘密基地 🧸</div>
+        </div>
+
+        <div class="polaroid" onclick="openFull(this)">
+            <img src="https://picsum.photos/400/400?random=4" alt="照片4">
+            <div class="caption">晚安世界 🌙</div>
+        </div>
+    </div>
+
+    <div class="watermark">Designed by Sarang 🐾</div>
+</div>
+
+<div class="overlay" id="overlay" onclick="closeFull()">
+    <img id="fullImg" src="">
+</div>
+
+<script>
+    function openFull(el) {
+        const fullImg = document.getElementById('fullImg');
+        const overlay = document.getElementById('overlay');
+        const clickedImgSrc = el.querySelector('img').src;
+        
+        fullImg.src = clickedImgSrc;
+        overlay.style.display = 'flex';
+    }
+
+    function closeFull() {
+        document.getElementById('overlay').style.display = 'none';
+    }
+</script>
+
+</body>
+</html>
