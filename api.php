@@ -2,18 +2,19 @@
 // 1. 设置响应头（含 CORS 预检）
 $allowedOrigin = getenv('ALLOWED_ORIGIN') ?: '*';
 header("Content-Type: application/json");
-<<<<<<< ours
 header("Access-Control-Allow-Origin: " . $allowedOrigin);
 header("Access-Control-Allow-Methods: POST, OPTIONS");
-=======
-header("Access-Control-Allow-Origin: " . (getenv('ALLOWED_ORIGIN') ?: '*'));
-header("Access-Control-Allow-Methods: POST");
->>>>>>> theirs
 header("Access-Control-Allow-Headers: Content-Type");
 
 // 处理 OPTIONS 预检
 if (($_SERVER['REQUEST_METHOD'] ?? '') === 'OPTIONS') {
     http_response_code(204);
+    exit;
+}
+
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    http_response_code(405);
+    echo json_encode(["error" => "仅支持 POST 请求"]);
     exit;
 }
 
@@ -28,15 +29,10 @@ if (empty($apiKey)) {
     exit;
 }
 
-<<<<<<< ours
-
-=======
->>>>>>> theirs
 // 3. 接收并解析前端数据
 $rawBody = file_get_contents("php://input");
 $input = json_decode($rawBody, true);
 
-<<<<<<< ours
 if (json_last_error() !== JSON_ERROR_NONE) {
     http_response_code(400);
     echo json_encode(["error" => "请求格式有误，请稍后再试。"]);
@@ -46,9 +42,6 @@ if (json_last_error() !== JSON_ERROR_NONE) {
 $userMessage = trim($input['message'] ?? '');
 
 if ($userMessage === '') {
-=======
-if (empty($userMessage)) {
->>>>>>> theirs
     http_response_code(400);
     echo json_encode(["error" => "哎呀，莎朗没听清，再说一遍好吗？🐶"]);
     exit;

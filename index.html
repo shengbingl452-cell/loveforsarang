@@ -328,13 +328,16 @@ diary[Math.floor(Math.random()*diary.length)];
 const STORAGE_KEY = 'sarang-chat-history';
 const inputEl = document.getElementById("input");
 const chatEl = document.getElementById("chat");
+const defaultIntroHTML = chatEl.innerHTML;
 const sendBtn = document.querySelector("button.send");
 const clearBtn = document.getElementById("clearBtn");
 
-const defaultIntroHTML = `<div class="message bot">
-注！我是sarang 欢迎来到我的秘密小窝！<br>
-在这里我们可以聊梦想。
-</div>`;
+document.getElementById("input").addEventListener("keydown", function(e){
+if(e.key === "Enter"){
+e.preventDefault();
+send();
+}
+});
 
 function scrollToBottom(){
   chatEl.scrollTop = chatEl.scrollHeight;
@@ -386,7 +389,6 @@ function clearChat(){
   scrollToBottom();
 }
 
- ours
 clearBtn.addEventListener("click", clearChat);
 inputEl.addEventListener("keydown", e => {
   if (e.key === "Enter" && !e.shiftKey) {
@@ -397,27 +399,7 @@ inputEl.addEventListener("keydown", e => {
 
 loadHistory();
 
-let data;
 
-try {
-let res = await fetch("api.php",{
-method:"POST",
-headers:{
-"Content-Type":"application/json"
-},
-body:JSON.stringify({message:text})
-});
-
-if(!res.ok){
-throw new Error("请求失败：" + res.status);
-}
-
-data = await res.json();
-} catch (e) {
-data = { reply: "网络有点不稳定，请稍后再试一次哦 🐶" };
-console.error(e);
-}
-theirs
 
 /* 发送消息 */
 
