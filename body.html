@@ -3,316 +3,174 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sarang 的卡通音乐屋</title>
+    <title>Sarang 的秘密天地</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&display=swap');
-        .mini-watermark {
-        position: fixed;
-        bottom: 10px;        /* 距离底部 10px */
-        right: 15px;         /* 距离右侧 15px */
-        font-size: 10px;     /* 字号设置得很小 */
-        color: #7a5537;      /* 使用你全局的棕色调 */
-        opacity: 0.3;        /* 关键：设置 30% 的透明度，若隐若现 */
-        pointer-events: none; /* 确保水印不影响鼠标点击下层内容 */
-        letter-spacing: 1px;
-        font-family: sans-serif; /* 使用系统简洁字体增强可读性 */
-        user-select: none;   /* 防止用户误选文字 */
-        z-index: 9999;       /* 确保在最顶层 */
-        }
         :root {
-            --main-brown: #5d4037;
+            --main-brown: #7a5537;
             --soft-yellow: #fff9e6;
-            --qq-green: #c8f7c5;
-            --netease-red: #ffcfcf;
-            --apple-pink: #f9d5e5;
-            --spotify-green: #d1f2eb;
+            --accent-pink: #ff8fb1;
+            --border-thick: 3px solid var(--main-brown);
         }
 
         body {
             background-color: var(--soft-yellow);
-            font-family: 'ZCOOL KuaiLe', 'Microsoft YaHei', sans-serif;
+            font-family: 'PingFang SC', sans-serif;
             margin: 0;
-            padding: 40px 20px;
+            padding: 20px;
             color: var(--main-brown);
-            overflow-x: hidden;
-        }
-
-        /* 动态背景气泡 */
-        .bg-bubbles {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1;
-            pointer-events: none;
-        }
-        .bubble {
-            position: absolute;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.6);
-            animation: float 15s infinite linear;
-        }
-
-        @keyframes float {
-            0% { transform: translateY(100vh) scale(0); opacity: 0; }
-            50% { opacity: 0.8; }
-            100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
         }
 
         .container {
-            max-width: 650px;
+            max-width: 450px;
             margin: 0 auto;
         }
 
-        header {
-            text-align: center;
-            margin-bottom: 40px;
-            position: relative;
+        /* 返回键样式 */
+        .back-nav { margin-bottom: 20px; }
+        .back-link {
+            text-decoration: none;
+            color: var(--main-brown);
+            font-weight: bold;
+            background: #fff;
+            padding: 8px 15px;
+            border: var(--border-thick);
+            border-radius: 50px;
+            box-shadow: 4px 4px 0 var(--main-brown);
+            display: inline-block;
         }
 
-        .avatar-placeholder {
-            width: 100px;
-            height: 100px;
-            background: #fff;
-            border: 4px solid var(--main-brown);
-            border-radius: 50%;
-            margin: 0 auto 15px;
+        /* 卡片通用样式 */
+        .card {
+            background: white;
+            border: var(--border-thick);
+            border-radius: 25px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 6px 6px 0 var(--main-brown);
+        }
+
+        h2 { font-size: 1.2rem; margin-top: 0; }
+
+        /* 点菜区动画 */
+        .food-slot {
+            background: #fdf6e3;
+            border: 2px dashed var(--main-brown);
+            border-radius: 15px;
+            height: 80px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 50px;
-            box-shadow: 6px 6px 0 var(--main-brown);
-        }
-
-        h1 { font-size: 2.5em; margin: 10px 0; text-shadow: 3px 3px 0 #fff; }
-
-        /* 歌单卡片 - 卡通化 */
-        .playlist-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-            gap: 20px;
-        }
-
-        .music-card {
-            padding: 20px;
-            border: 3px solid var(--main-brown);
-            border-radius: 20px;
-            text-decoration: none;
-            color: var(--main-brown);
-            text-align: center;
-            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            box-shadow: 6px 6px 0 var(--main-brown);
-            position: relative;
+            font-size: 22px;
+            font-weight: bold;
+            color: #e67e22;
+            margin-bottom: 15px;
             overflow: hidden;
         }
 
-        .music-card:active { transform: translate(4px, 4px); box-shadow: 2px 2px 0 var(--main-brown); }
-        .music-card:hover { transform: scale(1.05) rotate(2deg); }
-
-        .icon-box { font-size: 40px; margin-bottom: 10px; display: block; }
-        .music-card span { font-weight: bold; font-size: 1.1em; }
-
-        .qq { background: var(--qq-green); }
-        .netease { background: var(--netease-red); }
-        .apple { background: var(--apple-pink); }
-        .spotify { background: var(--spotify-green); }
-
-        /* 心情打卡区 - 拟物化 */
-        .mood-box {
-            background: #fff;
-            border: 3px solid var(--main-brown);
-            border-radius: 30px;
-            margin-top: 50px;
-            padding: 30px;
-            box-shadow: 8px 8px 0 rgba(93, 64, 55, 0.1);
-        }
-
-        .mood-btns {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 20px;
-        }
-
-        .mood-btn {
-            background: #f0f0f0;
-            border: 3px solid var(--main-brown);
+        .btn-pick {
+            width: 100%;
+            background: var(--accent-pink);
+            color: white;
+            border: var(--border-thick);
+            padding: 12px;
             border-radius: 15px;
-            width: 60px;
-            height: 60px;
-            font-size: 28px;
-            cursor: pointer;
-            transition: 0.2s;
-            box-shadow: 0 4px 0 var(--main-brown);
-        }
-
-        .mood-btn:hover { background: var(--soft-yellow); transform: translateY(-2px); }
-        .mood-btn:active { transform: translateY(4px); box-shadow: 0 0 0 var(--main-brown); }
-
-        #mood-msg {
-            margin-top: 25px;
+            font-size: 1.1rem;
             font-weight: bold;
-            color: #ff8a65;
-            min-height: 1.2em;
+            cursor: pointer;
+            box-shadow: 0 4px 0 var(--main-brown);
+            transition: 0.1s;
+        }
+        .btn-pick:active { transform: translateY(4px); box-shadow: 0 0 0 var(--main-brown); }
+
+        /* 歌单网格 */
+        .music-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        .music-item {
+            border: 2px solid var(--main-brown);
+            border-radius: 12px;
+            padding: 10px;
+            text-decoration: none;
+            color: var(--main-brown);
+            text-align: center;
+            font-size: 14px;
         }
 
-        /* 响应式微调 */
-        @media (max-width: 400px) {
-            .playlist-grid { grid-template-columns: 1fr 1fr; }
+        /* 简单动画 */
+        .pop { animation: popScale 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        @keyframes popScale {
+            0% { transform: scale(0.7); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .watermark {
+            text-align: center;
+            font-size: 10px;
+            opacity: 0.2;
+            margin-top: 30px;
         }
     </style>
 </head>
 <body>
 
-<div class="bg-bubbles" id="bubbles"></div>
-
 <div class="container">
-    <header>
-        <div class="avatar-placeholder">🎨</div>
-        <h1>Sarang's Room</h1>
-        <p>♪(๑ᴖ◡ᴖ๑)♪ 欢迎来到我的音乐游乐场</p>
-    </header>
+    <div class="back-nav">
+        <a href="index.html" class="back-link">👈 返回小窝</a>
+    </div>
 
-    <section>
-        <h2 style="text-align: center;">🎶 歌单传送门</h2>
-        <div class="playlist-grid">
-            <a href="http://t.cn/AXcCNzoH" target="_blank" class="music-card qq">
-                <i class="icon-box">🦖</i><span>QQ 音乐</span>
-            </a>
-            <a href="https://163cn.tv/2izY3UE" target="_blank" class="music-card netease">
-                <i class="icon-box">🎈</i><span>网易云</span>
-            </a>
-            <a href="http://t.cn/AXcCD6ez" target="_blank" class="music-card apple">
-                <i class="icon-box">🍭</i><span>Apple</span>
-            </a>
-            <a href="https://open.spotify.com/playlist/2pTSSNGXUBUWeGqq6Ljy8E?si=lGt_FnFXQIOnQAsgcL1Z8g&pi=swsS0j2uRD2dP" target="_blank" class="music-card spotify">
-                <i class="icon-box">🥑</i><span>Spotify</span>
-            </a>
-        </div>
-    </section>
+    <div class="card">
+        <h2>🍱 莎朗的点名时间</h2>
+        <div class="food-slot" id="food-result">今天吃什么？</div>
+        <button class="btn-pick" onclick="startRolling()">✨ 随机点菜</button>
+    </div>
 
-    <section class="mood-box">
-        <h2 style="margin-top:0; text-align: center;">☁️ 捕捉今日心情</h2>
-        <div class="mood-btns">
-            <button class="mood-btn" onclick="celebrate(this, '超级开心！✨')">😆</button>
-            <button class="mood-btn" onclick="celebrate(this, '充实的一天~')">😎</button>
-            <button class="mood-btn" onclick="celebrate(this, '需要充充电...')">🔋</button>
-            <button class="mood-btn" onclick="celebrate(this, '晚安好梦~')">🌙</button>
+    <div class="card">
+        <h2>🎵 收藏歌单</h2>
+        <div class="music-grid">
+            <a href="http://t.cn/AXcCNzoH" target="_blank" class="music-item">QQ 音乐</a>
+            <a href="https://163cn.tv/2izY3UE" target="_blank" class="music-item">网易云</a>
+            <a href="http://t.cn/AXcCD6ez" target="_blank" class="music-item">Apple</a>
+            <a href="http://t.cn/AXcCFypr" target="_blank" class="music-item">Spotify</a>
         </div>
-        <div id="mood-msg" style="text-align: center;"></div>
-    </section>
+    </div>
+
+    <div class="watermark">Designed by Sarang 🐾</div>
 </div>
 
-<script>
-    // 生成背景气泡
-    const bubbleContainer = document.getElementById('bubbles');
-    for (let i = 0; i < 15; i++) {
-        const bubble = document.createElement('div');
-        bubble.className = 'bubble';
-        const size = Math.random() * 60 + 20 + 'px';
-        bubble.style.width = size;
-        bubble.style.height = size;
-        bubble.style.left = Math.random() * 100 + 'vw';
-        bubble.style.animationDelay = Math.random() * 10 + 's';
-        bubble.style.animationDuration = Math.random() * 10 + 10 + 's';
-        bubbleContainer.appendChild(bubble);
-    }
-
-    // 心情互动
-    function celebrate(btn, text) {
-        document.getElementById('mood-msg').innerText = text;
-        
-        // 简单的粒子喷发效果
-        for(let i=0; i<8; i++) {
-            const part = document.createElement('div');
-            part.innerText = '✨';
-            part.style.position = 'fixed';
-            part.style.left = event.clientX + 'px';
-            part.style.top = event.clientY + 'px';
-            part.style.transition = 'all 0.6s ease-out';
-            document.body.appendChild(part);
-            
-            setTimeout(() => {
-                part.style.transform = `translate(${(Math.random()-0.5)*100}px, ${(Math.random()-0.5)*100}px)`;
-                part.style.opacity = '0';
-            }, 10);
-            
-            setTimeout(() => part.remove(), 600);
-        }
-    }
-</script>
 <script src="menu.js"></script>
 
 <script>
-function pickFood() {
-    const display = document.getElementById('food-display');
-    const btn = document.querySelector('.pick-btn');
-    
-    // 1. 按钮点击效果
-    btn.style.transform = "scale(0.9)";
-    setTimeout(() => btn.style.transform = "scale(1)", 100);
+    let isRolling = false;
 
-    // 2. 模拟“快速翻找”的滚动效果（增加互动感）
-    let count = 0;
-    const timer = setInterval(() => {
-        const randomTemp = myMenu[Math.floor(Math.random() * myMenu.length)];
-        display.innerText = randomTemp;
-        display.style.opacity = "0.5";
-        count++;
+    function startRolling() {
+        if (isRolling) return;
+        isRolling = true;
         
-        if (count > 10) { // 滚动10次后停止
-            clearInterval(timer);
-            const finalChoice = myMenu[Math.floor(Math.random() * myMenu.length)];
-            display.innerText = "🌟 " + finalChoice + " 🌟";
-            display.style.opacity = "1";
-            display.classList.add('food-pop'); // 触发之前写好的弹出动画
-        }
-    }, 50);
-}
+        const display = document.getElementById('food-result');
+        display.classList.remove('pop');
+        
+        let count = 0;
+        const maxScroll = 12; // 滚动次数
+
+        const timer = setInterval(() => {
+            // 从引入的 myMenu 数组中随机取值
+            const randomIndex = Math.floor(Math.random() * myMenu.length);
+            display.innerText = myMenu[randomIndex];
+            count++;
+
+            if (count >= maxScroll) {
+                clearInterval(timer);
+                isRolling = false;
+                // 最终结果
+                const finalIndex = Math.floor(Math.random() * myMenu.length);
+                display.innerHTML = "🌟 " + myMenu[finalIndex] + " 🌟";
+                display.classList.add('pop'); // 触发弹出动画
+            }
+        }, 60);
+    }
 </script>
-<a href="javascript:history.back()" class="back-btn" title="返回上一页">
-    <span class="back-icon">👈</span>
-    <span class="back-text">回去</span>
-</a>
 
-<style>
-    .back-btn {
-        position: fixed;
-        top: 20px;
-        left: 20px;
-        z-index: 1000;
-        display: flex;
-        align-items: center;
-        gap: 5px;
-        padding: 10px 15px;
-        background: #fff;
-        border: 3px solid var(--main-brown);
-        border-radius: 50px;
-        text-decoration: none;
-        color: var(--main-brown);
-        font-weight: bold;
-        box-shadow: 4px 4px 0 var(--main-brown);
-        transition: all 0.2s;
-        cursor: pointer;
-    }
-
-    .back-btn:hover {
-        transform: translate(-2px, -2px);
-        box-shadow: 6px 6px 0 var(--main-brown);
-        background: var(--soft-yellow);
-    }
-
-    .back-btn:active {
-        transform: translate(2px, 2px);
-        box-shadow: 0 0 0 var(--main-brown);
-    }
-
-    .back-icon { font-size: 20px; }
-    
-    /* 手机端稍微缩小一点，避免挡住内容 */
-    @media (max-width: 480px) {
-        .back-btn { padding: 8px 12px; font-size: 0.9em; }
-    }
-</style>
-<div class="mini-watermark">
-    allforsarang ---特别致谢onlysarangu🐾
-</div>
 </body>
 </html>
