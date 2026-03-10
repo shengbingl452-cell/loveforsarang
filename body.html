@@ -1,129 +1,228 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sarang 的个人主页</title>
-  <style>
-  /* 基础样式延续... */
-  .playlist-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 15px;
-      margin-top: 15px;
-  }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sarang 的卡通音乐屋</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&display=swap');
 
-  .music-link-card {
-      display: flex;
-      align-items: center;
-      padding: 12px 16px;
-      background: #fff;
-      border-radius: 10px;
-      text-decoration: none;
-      color: #333;
-      font-weight: 500;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-      transition: all 0.3s ease;
-      border: 1px solid transparent;
-  }
+        :root {
+            --main-brown: #5d4037;
+            --soft-yellow: #fff9e6;
+            --qq-green: #c8f7c5;
+            --netease-red: #ffcfcf;
+            --apple-pink: #f9d5e5;
+            --spotify-green: #d1f2eb;
+        }
 
-  .music-link-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  }
+        body {
+            background-color: var(--soft-yellow);
+            font-family: 'ZCOOL KuaiLe', 'Microsoft YaHei', sans-serif;
+            margin: 0;
+            padding: 40px 20px;
+            color: var(--main-brown);
+            overflow-x: hidden;
+        }
 
-  .platform-icon {
-      width: 24px;
-      height: 24px;
-      margin-right: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 18px;
-  }
+        /* 动态背景气泡 */
+        .bg-bubbles {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+        .bubble {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.6);
+            animation: float 15s infinite linear;
+        }
 
-  /* 各平台特色边框/文字色 */
-  .qq-music:hover { border-color: #31c27c; color: #31c27c; }
-  .netease-music:hover { border-color: #e60026; color: #e60026; }
-  .apple-music:hover { border-color: #fa243c; color: #fa243c; }
-  .spotify:hover { border-color: #1DB954; color: #1DB954; }
+        @keyframes float {
+            0% { transform: translateY(100vh) scale(0); opacity: 0; }
+            50% { opacity: 0.8; }
+            100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
+        }
 
-  .mood-options {
-      display: flex;
-      gap: 10px;
-      margin-top: 12px;
-  }
+        .container {
+            max-width: 650px;
+            margin: 0 auto;
+        }
 
-  .mood-btn {
-      padding: 10px 14px;
-      border-radius: 12px;
-      border: 1px solid rgba(0,0,0,0.12);
-      background: #fff;
-      cursor: pointer;
-      font-size: 18px;
-      transition: transform 0.15s ease;
-  }
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
 
-  .mood-btn:hover {
-      transform: translateY(-2px);
-  }
-  </style>
+        .avatar-placeholder {
+            width: 100px;
+            height: 100px;
+            background: #fff;
+            border: 4px solid var(--main-brown);
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 50px;
+            box-shadow: 6px 6px 0 var(--main-brown);
+        }
+
+        h1 { font-size: 2.5em; margin: 10px 0; text-shadow: 3px 3px 0 #fff; }
+
+        /* 歌单卡片 - 卡通化 */
+        .playlist-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 20px;
+        }
+
+        .music-card {
+            padding: 20px;
+            border: 3px solid var(--main-brown);
+            border-radius: 20px;
+            text-decoration: none;
+            color: var(--main-brown);
+            text-align: center;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            box-shadow: 6px 6px 0 var(--main-brown);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .music-card:active { transform: translate(4px, 4px); box-shadow: 2px 2px 0 var(--main-brown); }
+        .music-card:hover { transform: scale(1.05) rotate(2deg); }
+
+        .icon-box { font-size: 40px; margin-bottom: 10px; display: block; }
+        .music-card span { font-weight: bold; font-size: 1.1em; }
+
+        .qq { background: var(--qq-green); }
+        .netease { background: var(--netease-red); }
+        .apple { background: var(--apple-pink); }
+        .spotify { background: var(--spotify-green); }
+
+        /* 心情打卡区 - 拟物化 */
+        .mood-box {
+            background: #fff;
+            border: 3px solid var(--main-brown);
+            border-radius: 30px;
+            margin-top: 50px;
+            padding: 30px;
+            box-shadow: 8px 8px 0 rgba(93, 64, 55, 0.1);
+        }
+
+        .mood-btns {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .mood-btn {
+            background: #f0f0f0;
+            border: 3px solid var(--main-brown);
+            border-radius: 15px;
+            width: 60px;
+            height: 60px;
+            font-size: 28px;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 4px 0 var(--main-brown);
+        }
+
+        .mood-btn:hover { background: var(--soft-yellow); transform: translateY(-2px); }
+        .mood-btn:active { transform: translateY(4px); box-shadow: 0 0 0 var(--main-brown); }
+
+        #mood-msg {
+            margin-top: 25px;
+            font-weight: bold;
+            color: #ff8a65;
+            min-height: 1.2em;
+        }
+
+        /* 响应式微调 */
+        @media (max-width: 400px) {
+            .playlist-grid { grid-template-columns: 1fr 1fr; }
+        }
+    </style>
 </head>
 <body>
 
+<div class="bg-bubbles" id="bubbles"></div>
+
 <div class="container">
     <header>
-        <h1>欢迎来到 Sarang 的个人空间</h1>
-        <p>这是我精心整理的收藏歌单：</p>
+        <div class="avatar-placeholder">🎨</div>
+        <h1>Sarang's Room</h1>
+        <p>♪(๑ᴖ◡ᴖ๑)♪ 欢迎来到我的音乐游乐场</p>
     </header>
 
-    <section id="playlist">
-        <h2>🎵 收藏歌单</h2>
+    <section>
+        <h2 style="text-align: center;">🎶 歌单传送门</h2>
         <div class="playlist-grid">
-            <a href="http://t.cn/AXcCNzoH" target="_blank" rel="noopener noreferrer" class="music-link-card qq-music">
-                <span class="platform-icon">🟢</span> QQ 音乐
+            <a href="http://t.cn/AXcCNzoH" target="_blank" class="music-card qq">
+                <i class="icon-box">🦖</i><span>QQ 音乐</span>
             </a>
-
-            <a href="https://163cn.tv/2izY3UE" target="_blank" rel="noopener noreferrer" class="music-link-card netease-music">
-                <span class="platform-icon">🔴</span> 网易云音乐
+            <a href="https://163cn.tv/2izY3UE" target="_blank" class="music-card netease">
+                <i class="icon-box">🎈</i><span>网易云</span>
             </a>
-
-            <a href="http://t.cn/AXcCD6ez" target="_blank" rel="noopener noreferrer" class="music-link-card apple-music">
-                <span class="platform-icon">🍎</span> Apple Music
+            <a href="http://t.cn/AXcCD6ez" target="_blank" class="music-card apple">
+                <i class="icon-box">🍭</i><span>Apple</span>
             </a>
-
-            <a href="https://open.spotify.com/playlist/2pTSSNGXUBUWeGqq6Ljy8E?si=lGt_FnFXQIOnQAsgcL1Z8g&pi=swsS0j2uRD2dP" target="_blank" rel="noopener noreferrer" class="music-link-card spotify">
-                <span class="platform-icon">🍏</span> Spotify
+            <a href="https://open.spotify.com/playlist/2pTSSNGXUBUWeGqq6Ljy8E?si=lGt_FnFXQIOnQAsgcL1Z8g&pi=swsS0j2uRD2dP" target="_blank" class="music-card spotify">
+                <i class="icon-box">🥑</i><span>Spotify</span>
             </a>
         </div>
     </section>
 
-    <section id="mood" style="margin-top: 40px;">
-        <h2>✨ 每日心情打卡</h2>
-        <div class="mood-tracker">
-            <p>今天的感觉怎么样？</p>
-            <div class="mood-options">
-                <button class="mood-btn" onclick="logMood(event, '😊')">😊</button>
-                <button class="mood-btn" onclick="logMood(event, '😐')">😐</button>
-                <button class="mood-btn" onclick="logMood(event, '😴')">😴</button>
-                <button class="mood-btn" onclick="logMood(event, '🔥')">🔥</button>
-            </div>
-            <div id="mood-history" style="margin-top: 15px; font-size: 0.85em; color: #8b5e3c;"></div>
+    <section class="mood-box">
+        <h2 style="margin-top:0; text-align: center;">☁️ 捕捉今日心情</h2>
+        <div class="mood-btns">
+            <button class="mood-btn" onclick="celebrate(this, '超级开心！✨')">😆</button>
+            <button class="mood-btn" onclick="celebrate(this, '充实的一天~')">😎</button>
+            <button class="mood-btn" onclick="celebrate(this, '需要充充电...')">🔋</button>
+            <button class="mood-btn" onclick="celebrate(this, '晚安好梦~')">🌙</button>
         </div>
+        <div id="mood-msg" style="text-align: center;"></div>
     </section>
 </div>
 
 <script>
-    function logMood(event, emoji) {
-        const history = document.getElementById('mood-history');
-        const now = new Date();
-        const timeStr = `${now.getHours()}:${now.getMinutes().toString().padStart(2, '0')}`;
-        history.innerHTML = `已记录：${emoji} (打卡时间 ${timeStr})`;
+    // 生成背景气泡
+    const bubbleContainer = document.getElementById('bubbles');
+    for (let i = 0; i < 15; i++) {
+        const bubble = document.createElement('div');
+        bubble.className = 'bubble';
+        const size = Math.random() * 60 + 20 + 'px';
+        bubble.style.width = size;
+        bubble.style.height = size;
+        bubble.style.left = Math.random() * 100 + 'vw';
+        bubble.style.animationDelay = Math.random() * 10 + 's';
+        bubble.style.animationDuration = Math.random() * 10 + 10 + 's';
+        bubbleContainer.appendChild(bubble);
+    }
 
-        const btn = event?.currentTarget;
-        if (btn) {
-            btn.style.transform = "scale(1.2)";
-            setTimeout(() => { btn.style.transform = "scale(1)"; }, 200);
+    // 心情互动
+    function celebrate(btn, text) {
+        document.getElementById('mood-msg').innerText = text;
+        
+        // 简单的粒子喷发效果
+        for(let i=0; i<8; i++) {
+            const part = document.createElement('div');
+            part.innerText = '✨';
+            part.style.position = 'fixed';
+            part.style.left = event.clientX + 'px';
+            part.style.top = event.clientY + 'px';
+            part.style.transition = 'all 0.6s ease-out';
+            document.body.appendChild(part);
+            
+            setTimeout(() => {
+                part.style.transform = `translate(${(Math.random()-0.5)*100}px, ${(Math.random()-0.5)*100}px)`;
+                part.style.opacity = '0';
+            }, 10);
+            
+            setTimeout(() => part.remove(), 600);
         }
     }
 </script>
