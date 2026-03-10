@@ -31,7 +31,16 @@ body {
 }
 
 h1 { font-size: 32px; margin-bottom: 5px; text-shadow: 2px 2px 0px #fff; }
-.subtitle { color: var(--accent-pink); margin-bottom: 20px; font-weight: bold; letter-spacing: 2px; }
+.subtitle { color: var(--accent-pink); margin-bottom: 15px; font-weight: bold; letter-spacing: 2px; }
+
+/* 语言切换按钮 */
+.lang-switch { margin-bottom: 15px; display: flex; gap: 8px; }
+.lang-switch button {
+    background: #fff; border: 2px solid var(--border-color); border-radius: 8px;
+    padding: 4px 12px; cursor: pointer; font-family: inherit; font-size: 12px;
+    transition: 0.2s;
+}
+.lang-switch button:hover { background: var(--accent-yellow); }
 
 /* 入口卡片 */
 .entry-group { width: min(100%, 420px); }
@@ -43,9 +52,9 @@ h1 { font-size: 32px; margin-bottom: 5px; text-shadow: 2px 2px 0px #fff; }
 .entry-card:hover { transform: translate(-2px, -2px); box-shadow: 8px 8px 0px var(--border-color); background: var(--bot-bubble); }
 .mini-photo-deco { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); font-size: 24px; opacity: 0.3; }
 
-/* 聊天窗口 */
+/* 聊天容器 */
 .chat-container {
-    width: min(100%, 420px); height: 50vh; background: #fff; border-radius: 30px;
+    width: min(100%, 420px); height: 45vh; background: #fff; border-radius: 30px;
     border: 4px solid var(--border-color); box-shadow: 10px 10px 0px rgba(122, 85, 55, 0.1);
     display: flex; flex-direction: column; overflow: hidden; position: relative;
 }
@@ -56,18 +65,40 @@ h1 { font-size: 32px; margin-bottom: 5px; text-shadow: 2px 2px 0px #fff; }
 .bot { background: var(--bot-bubble); align-self: flex-start; border-bottom-left-radius: 4px; }
 .user { background: var(--user-bubble); align-self: flex-end; border-bottom-right-radius: 4px; }
 
+.diary-box { padding: 10px 15px; font-size: 12px; background: #fffbeb; border-top: 2px dashed #7a5537; width: min(100%, 390px); margin-bottom: 10px; border-radius: 10px; }
+
 .input-area { padding: 12px; background: #fff; border-top: 4px solid var(--border-color); display: flex; gap: 8px; }
 #input { flex: 1; border: 3px solid var(--border-color); border-radius: 12px; padding: 8px; font-family: inherit; resize: none; outline: none; }
 .send { background: var(--accent-pink); color: white; border: 3px solid var(--border-color); border-radius: 12px; padding: 0 12px; cursor: pointer; font-weight: bold; }
 
-/* ------------------------------------------------ */
-/* ✨ 桌面宠物专属样式 */
+/* 桌面宠物 */
 #pet-wrapper { position: fixed; bottom: 90px; right: 20px; z-index: 999; display: flex; flex-direction: column; align-items: center; pointer-events: none; }
 #pet-container { pointer-events: auto; cursor: pointer; transition: transform 0.3s; }
-#pet-img { width: 100px; transition: opacity 0.3s, filter 0.3s; }
-.pet-bubble { background: white; border: 3px solid var(--border-color); border-radius: 15px; padding: 5px 10px; margin-bottom: 5px; font-size: 12px; opacity: 0; transition: opacity 0.3s; white-space: nowrap; }
+/* 找到 .pet-bubble 并修改 */
+.pet-bubble {
+    background: white;
+    border: 3px solid var(--border-color);
+    border-radius: 15px;
+    padding: 5px 10px;
+    margin-bottom: 15px; /* 增大间距，给气泡留出空间 */
+    font-size: 12px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    white-space: nowrap;
+    
+    /* 核心修改：确保气泡永远在最上层 */
+    position: relative;
+    z-index: 10; 
+}
 
-/* 动画库 */
+/* 确保容器内的图片层级较低 */
+#pet-img {
+    width: 100px;
+    transition: opacity 0.3s;
+    position: relative;
+    z-index: 5;
+}
+
 .float-ani { animation: float 3s ease-in-out infinite; }
 @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 
@@ -80,8 +111,7 @@ h1 { font-size: 32px; margin-bottom: 5px; text-shadow: 2px 2px 0px #fff; }
 .chewing { animation: chew 0.5s ease-in-out infinite; }
 @keyframes chew { 0%, 100% { transform: translateY(-20px) scale(1.1); } 50% { transform: translateY(-25px) scale(1.15) rotate(2deg); } }
 
-#snack { position: fixed; right: 25px; bottom: 25px; width: 60px; height: 60px; border-radius: 50%; border: 4px solid var(--border-color); background: var(--accent-yellow); font-size: 28px; cursor: pointer; box-shadow: 4px 4px 0px var(--border-color); z-index: 1000; transition: 0.2s; }
-#snack:active { transform: scale(0.9); box-shadow: 0px 0px 0px; }
+#snack { position: fixed; right: 25px; bottom: 25px; width: 60px; height: 60px; border-radius: 50%; border: 4px solid var(--border-color); background: var(--accent-yellow); font-size: 28px; cursor: pointer; box-shadow: 4px 4px 0px var(--border-color); z-index: 1000; }
 
 .mini-watermark { position: fixed; bottom: 8px; left: 50%; transform: translateX(-50%); font-size: 11px; color: #7a5537; opacity: 0.2; pointer-events: none; }
 </style>
@@ -89,29 +119,37 @@ h1 { font-size: 32px; margin-bottom: 5px; text-shadow: 2px 2px 0px #fff; }
 
 <body>
 
-<h1>🐾 莎朗的小狗窝 🥭</h1>
-<div class="subtitle">RYU SARANG</div>
+<h1 id="main-title">🐾 莎朗的小狗窝 🥭</h1>
+<div class="subtitle" id="main-subtitle">RYU SARANG</div>
+
+<div class="lang-switch">
+    <button onclick="changeLang('en')">English</button>
+    <button onclick="changeLang('ko')">한국어</button>
+    <button onclick="changeLang('zh')">中文</button>
+</div>
 
 <div class="entry-group">
     <a class="entry-card" href="body.html">
-        <div class="entry-title">🧸 秘密天地</div>
-        <div class="entry-desc">去看看我的歌单和点菜机！</div>
+        <div class="entry-title" id="entry1-t">🧸 秘密天地</div>
+        <div class="entry-desc" id="entry1-d">去看看我的歌单和点菜机！</div>
     </a>
     <a class="entry-card" href="gallery.php">
-        <div class="entry-title">📸 瞬间记录</div>
-        <div class="entry-desc">这里存着莎朗亮晶晶的回忆~</div>
+        <div class="entry-title" id="entry2-t">📸 瞬间记录</div>
+        <div class="entry-desc" id="entry2-d">这里存着莎朗亮晶晶的回忆~</div>
         <div class="mini-photo-deco">🖼️</div>
     </a>
 </div>
 
 <div class="chat-container">
-    <div class="status-bar">🐶 Sarang 正在想你... <button id="clearBtn" style="float:right; font-size:11px; border-radius:8px; border:2px solid #7a5537; background:#fff; cursor:pointer;">清空</button></div>
-    <div class="chat-box" id="chat"><div class="message bot">汪！我是 Sarang 🐾 <br>欢迎来到我的秘密小窝！</div></div>
+    <div class="status-bar"><span id="status-txt">🐶 Sarang 正在想你...</span> <button id="clearBtn" style="float:right; font-size:11px; border-radius:8px; border:2px solid #7a5537; background:#fff; cursor:pointer;">清空</button></div>
+    <div class="chat-box" id="chat"></div>
     <div class="input-area">
-        <textarea id="input" placeholder="和 Sarang 聊聊吧..." rows="1"></textarea>
+        <textarea id="input" rows="1"></textarea>
         <button class="send" onclick="send()">发送</button>
     </div>
 </div>
+
+<div class="diary-box">📖 <b id="diary-label">莎朗的小日记：</b> <span id="diary">...</span></div>
 
 <div id="pet-wrapper">
     <div id="pet-speech" class="pet-bubble">Zzz...</div>
@@ -124,118 +162,105 @@ h1 { font-size: 32px; margin-bottom: 5px; text-shadow: 2px 2px 0px #fff; }
 <div class="mini-watermark">allforsarang ---特别致谢onlysarangu🐾</div>
 
 <script>
-// --- 核心配置 ---
-const IDLE_SRC = 'assets/pet-idle.png';
-const EAT_SRC = 'assets/pet-eat.png';
-const SLEEP_SRC = 'assets/pet-sleep.png';
+// --- 语言包 ---
+const i18n = {
+    'zh': { title: "🐾 莎朗的小狗窝 🥭", subtitle: "RYU SARANG", entry1_t: "🧸 秘密天地", entry1_d: "去看看我的歌单和点菜机！", entry2_t: "📸 瞬间记录", entry2_d: "这里存着莎朗亮晶晶的回忆~", status: "🐶 Sarang 正在想你...", clear: "清空", welcome: "汪！我是 Sarang 🐾 <br>欢迎来到我的秘密小窝！", input_p: "和 Sarang 聊聊吧...", send: "发送", diary_l: "莎朗的小日记：", pet_touch: ["汪！好舒服~", "摸摸头真开心✨", "最喜欢你了！"], pet_eat: "吧唧吧唧... 超级好吃！🍪", pet_sleep: "Zzz... 呼...", pet_listen: "嗯嗯，在听呢..." },
+    'en': { title: "🐾 Sarang's Den 🥭", subtitle: "RYU SARANG", entry1_t: "🧸 Secret Space", entry1_d: "Check my playlist and menu!", entry2_t: "📸 Moments", entry2_d: "Bright memories of Sarang~", status: "🐶 Sarang is thinking of you...", clear: "Clear", welcome: "Woof! I'm Sarang 🐾 <br>Welcome to my secret den!", input_p: "Chat with Sarang...", send: "Send", diary_l: "Sarang's Diary:", pet_touch: ["Woof! Feels good~", "Petting me? ✨", "I love you!"], pet_eat: "Munch munch... Best cookie! 🍪", pet_sleep: "Zzz... Hooo...", pet_listen: "Hmm, I'm listening..." },
+    'ko': { title: "🐾 사랑이의 작은 방 🥭", subtitle: "류사랑 (RYU SARANG)", entry1_t: "🧸 비밀 공간", entry1_d: "나의 플레이리스트와 메뉴를 봐봐!", entry2_t: "📸 순간의 기록", entry2_d: "사랑이의 반짝이는 추억들~", status: "🐶 사랑이가 당신을 생각 중...", clear: "지우기", welcome: "멍멍! 나는 사랑이야 🐾 <br>나의 비밀 아지트에 온 걸 환영해!", input_p: "사랑이랑 대화하자...", send: "전송", diary_l: "사랑이의 일기:", pet_touch: ["멍멍! 기분 좋아~", "지금 나 쓰다듬는 거야? ✨", "네가 제일 좋아!"], pet_eat: "냠냠... 진짜 맛있다! 🍪", pet_sleep: "쿨쿨... 드렁...", pet_listen: "응응, 듣고 있어..." }
+};
 
-const chatEl = document.getElementById("chat");
-const inputEl = document.getElementById("input");
-const petImg = document.getElementById('pet-img');
-const petSpeech = document.getElementById('pet-speech');
-const petContainer = document.getElementById('pet-container');
-
+let currentLang = localStorage.getItem('pref-lang') || 'zh';
+const IDLE_SRC = 'assets/pet-idle.png', EAT_SRC = 'assets/pet-eat.png', SLEEP_SRC = 'assets/pet-sleep.png';
+const chatEl = document.getElementById("chat"), inputEl = document.getElementById("input"), petImg = document.getElementById('pet-img'), petSpeech = document.getElementById('pet-speech'), petContainer = document.getElementById('pet-container');
 let idleTimer;
 
-// 预加载
-[IDLE_SRC, EAT_SRC, SLEEP_SRC].forEach(src => { new Image().src = src; });
+function changeLang(lang) {
+    currentLang = lang; localStorage.setItem('pref-lang', lang);
+    const t = i18n[lang];
+    document.getElementById('main-title').innerText = t.title;
+    document.getElementById('main-subtitle').innerText = t.subtitle;
+    document.getElementById('entry1-t').innerText = t.entry1_t;
+    document.getElementById('entry1-d').innerText = t.entry1_d;
+    document.getElementById('entry2-t').innerText = t.entry2_t;
+    document.getElementById('entry2-d').innerText = t.entry2_d;
+    document.getElementById('status-txt').innerText = t.status;
+    document.getElementById('clearBtn').innerText = t.clear;
+    document.getElementById('input').placeholder = t.input_p;
+    document.querySelectorAll('.send')[0].innerText = t.send;
+    document.getElementById('diary-label').innerText = t.diary_l;
+    chatEl.innerHTML = `<div class="message bot">${t.welcome}</div>`;
+}
 
 // --- 宠物逻辑 ---
 function sarangTalk(text, persist = false) {
-    petSpeech.innerText = text;
-    petSpeech.style.opacity = '1';
-    if (!persist) setTimeout(() => { petSpeech.style.opacity = '0'; }, 3000);
+    petSpeech.innerText = text; petSpeech.style.opacity = '1';
+    if (!persist) setTimeout(() => { if(!petContainer.classList.contains('sleep-ani')) petSpeech.style.opacity = '0'; }, 3000);
 }
 
 function wakeUp() {
     clearTimeout(idleTimer);
     if (petContainer.classList.contains('sleep-ani')) {
-        petContainer.classList.remove('sleep-ani');
-        petContainer.classList.add('float-ani');
-        petImg.src = IDLE_SRC;
-        petSpeech.style.opacity = '0';
+        petContainer.classList.remove('sleep-ani'); petContainer.classList.add('float-ani');
+        petImg.src = IDLE_SRC; petSpeech.style.opacity = '0';
     }
     startIdleTimer();
 }
 
 function goToSleep() {
     if (petContainer.classList.contains('chewing') || inputEl.value.length > 0) return;
-    petContainer.classList.remove('float-ani', 'listen-ani');
-    petContainer.classList.add('sleep-ani');
-    petImg.src = SLEEP_SRC;
-    sarangTalk("Zzz... 呼...", true);
+    petContainer.classList.remove('float-ani', 'listen-ani'); petContainer.classList.add('sleep-ani');
+    petImg.src = SLEEP_SRC; sarangTalk(i18n[currentLang].pet_sleep, true);
 }
 
-function startIdleTimer() {
-    clearTimeout(idleTimer);
-    idleTimer = setTimeout(goToSleep, 15000); // 15秒无操作睡觉
-}
+function startIdleTimer() { clearTimeout(idleTimer); idleTimer = setTimeout(goToSleep, 30000); }
 
-// --- 交互事件 ---
+// --- 事件 ---
 inputEl.addEventListener('input', () => {
     wakeUp();
     if (inputEl.value.length > 0) {
-        petContainer.classList.remove('float-ani');
-        petContainer.classList.add('listen-ani');
-        sarangTalk("嗯嗯，在听呢...", true);
+        petContainer.classList.remove('float-ani'); petContainer.classList.add('listen-ani');
+        sarangTalk(i18n[currentLang].pet_listen, true);
     } else {
-        petContainer.classList.remove('listen-ani');
-        petContainer.classList.add('float-ani');
+        petContainer.classList.remove('listen-ani'); petContainer.classList.add('float-ani');
         petSpeech.style.opacity = '0';
     }
 });
 
 petContainer.onclick = () => {
-    wakeUp();
-    const lines = ["汪！好舒服~", "摸摸头，真开心✨", "莎朗最喜欢你了！"];
-    sarangTalk(lines[Math.floor(Math.random() * lines.length)]);
-    petContainer.style.transform = "scale(1.2)";
-    setTimeout(() => { petContainer.style.transform = "scale(1)"; }, 200);
+    wakeUp(); const t = i18n[currentLang];
+    sarangTalk(t.pet_touch[Math.floor(Math.random() * t.pet_touch.length)]);
+    petContainer.style.transform = "scale(1.2)"; setTimeout(() => petContainer.style.transform="scale(1)", 200);
 };
 
 document.getElementById('snack').onclick = () => {
-    wakeUp();
-    petImg.src = EAT_SRC;
-    sarangTalk("吧唧吧唧... 超级好吃！🍪");
+    wakeUp(); petImg.src = EAT_SRC; sarangTalk(i18n[currentLang].pet_eat);
     petContainer.classList.remove('float-ani', 'sleep-ani', 'listen-ani');
     petContainer.classList.add('chewing');
-    setTimeout(() => {
-        petImg.src = IDLE_SRC;
-        petContainer.classList.remove('chewing');
-        petContainer.classList.add('float-ani');
-    }, 3000); 
+    setTimeout(() => { petImg.src = IDLE_SRC; petContainer.classList.remove('chewing'); petContainer.classList.add('float-ani'); }, 5000);
 };
 
-// --- 聊天逻辑 ---
 async function send() {
-    let text = inputEl.value.trim();
-    if (!text) return;
-    appendMsg("user", text);
-    inputEl.value = "";
-    petContainer.classList.remove('listen-ani');
-    petContainer.classList.add('float-ani');
-    
+    let text = inputEl.value.trim(); if (!text) return;
+    appendMsg("user", text); inputEl.value = "";
+    petContainer.classList.remove('listen-ani'); petContainer.classList.add('float-ani');
     try {
         let res = await fetch("api.php", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ message: text }) });
-        let data = await res.json();
-        appendMsg("bot", data.reply || "Sarang在发呆...");
-    } catch (err) { appendMsg("bot", "Sarang跑远了..."); }
+        let data = await res.json(); appendMsg("bot", data.reply || "...");
+    } catch (e) { appendMsg("bot", "Sarang error..."); }
     startIdleTimer();
 }
 
 function appendMsg(role, text) {
-    const div = document.createElement("div");
-    div.className = "message " + role;
-    div.innerText = text;
-    chatEl.appendChild(div);
-    chatEl.scrollTop = chatEl.scrollHeight;
+    const div = document.createElement("div"); div.className = "message " + role; div.innerText = text;
+    chatEl.appendChild(div); chatEl.scrollTop = chatEl.scrollHeight;
 }
 
+const diaries = ["今天天空很好看。", "想去海边。", "芒果味夏天。"];
+document.getElementById("diary").innerText = diaries[Math.floor(Math.random()*diaries.length)];
 document.getElementById("clearBtn").onclick = () => { chatEl.innerHTML = ""; };
 inputEl.onkeydown = (e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(); } };
 
-// 初始化
-startIdleTimer();
+changeLang(currentLang); startIdleTimer();
 </script>
 </body>
 </html>
