@@ -226,6 +226,50 @@
         }
     }
 </script>
+<a href="javascript:history.back()" class="back-btn" title="返回上一页">
+    <span class="back-icon">👈</span>
+    <span class="back-text">回去</span>
+</a>
+
+<style>
+    .back-btn {
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        padding: 10px 15px;
+        background: #fff;
+        border: 3px solid var(--main-brown);
+        border-radius: 50px;
+        text-decoration: none;
+        color: var(--main-brown);
+        font-weight: bold;
+        box-shadow: 4px 4px 0 var(--main-brown);
+        transition: all 0.2s;
+        cursor: pointer;
+    }
+
+    .back-btn:hover {
+        transform: translate(-2px, -2px);
+        box-shadow: 6px 6px 0 var(--main-brown);
+        background: var(--soft-yellow);
+    }
+
+    .back-btn:active {
+        transform: translate(2px, 2px);
+        box-shadow: 0 0 0 var(--main-brown);
+    }
+
+    .back-icon { font-size: 20px; }
+    
+    /* 手机端稍微缩小一点，避免挡住内容 */
+    @media (max-width: 480px) {
+        .back-btn { padding: 8px 12px; font-size: 0.9em; }
+    }
+</style>
 
 </body>
 </html>
