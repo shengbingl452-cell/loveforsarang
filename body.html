@@ -1,50 +1,157 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>莎朗的小天地</title>
-<style>
-body{
-  margin:0;
-  padding:40px 20px;
-  font-family:"PingFang SC",sans-serif;
-  background:#f7f2e8;
-  color:#5a3c28;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-}
-.card{
-  max-width:680px;
-  background:#fff9ef;
-  border:3px solid #c9a27b;
-  border-radius:20px;
-  padding:24px;
-  box-shadow:0 8px 16px rgba(0,0,0,.1);
-}
-h1{margin-top:0;color:#7a5537;}
-a.back{
-  margin-top:20px;
-  text-decoration:none;
-  background:#ffd24d;
-  color:#5a3c28;
-  padding:10px 16px;
-  border-radius:999px;
-  font-weight:700;
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sarang 的个人主页</title>
+    <style>
+    /* 基础样式延续... */
+    .playlist-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+        margin-top: 15px;
+    }
+
+    .music-link-card {
+        display: flex;
+        align-items: center;
+        padding: 12px 16px;
+        background: #fff;
+        border-radius: 10px;
+        text-decoration: none;
+        color: #333;
+        font-weight: 500;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        transition: all 0.3s ease;
+        border: 1px solid transparent;
+    }
+
+    .music-link-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .platform-icon {
+        width: 24px;
+        height: 24px;
+        margin-right: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+    }
+
+    /* 各平台特色边框/文字色 */
+    .qq-music:hover { border-color: #31c27c; color: #31c27c; }
+    .netease-music:hover { border-color: #e60026; color: #e60026; }
+    .apple-music:hover { border-color: #fa243c; color: #fa243c; }
+    .spotify:hover { border-color: #1DB954; color: #1DB954; }
 </style>
+
+<div class="container">
+    <header>
+        <h1>欢迎来到 Sarang 的个人空间</h1>
+        <p>这是我精心整理的收藏歌单：</p>
+    </header>
+
+    <section id="playlist">
+        <h2>🎵 收藏歌单</h2>
+        <div class="playlist-grid">
+            <a href="http://t.cn/AXcCNzoH" target="_blank" rel="noopener noreferrer" class="music-link-card qq-music">
+                <span class="platform-icon">🟢</span> QQ 音乐
+            </a>
+
+            <a href="http://t.cn/AXcCD6e7" target="_blank" rel="noopener noreferrer" class="music-link-card netease-music">
+                <span class="platform-icon">🔴</span> 网易云音乐
+            </a>
+
+            <a href="http://t.cn/AXcCD6ez" target="_blank" rel="noopener noreferrer" class="music-link-card apple-music">
+                <span class="platform-icon">🍎</span> Apple Music
+            </a>
+
+            <a href="http://t.cn/AXcCFypr" target="_blank" rel="noopener noreferrer" class="music-link-card spotify">
+                <span class="platform-icon">🍏</span> Spotify
+            </a>
+        </div>
+    </section>
+
+    <section id="mood" style="margin-top: 40px;">
+        <h2>✨ 每日心情打卡</h2>
+        <div class="mood-tracker">
+            <p>今天的感觉怎么样？</p>
+            <div class="mood-options">
+                <button class="mood-btn" onclick="logMood('😊')">😊</button>
+                <button class="mood-btn" onclick="logMood('😐')">😐</button>
+                <button class="mood-btn" onclick="logMood('😴')">😴</button>
+                <button class="mood-btn" onclick="logMood('🔥')">🔥</button>
+            </div>
+            <div id="mood-history" style="margin-top: 15px; font-size: 0.85em; color: #8b5e3c;"></div>
+        </div>
+    </section>
+</div>
+
+<script>
+    function logMood(emoji) {
+        const history = document.getElementById('mood-history');
+        const now = new Date();
+        const timeStr = `${now.getHours()}:${now.getMinutes().toString().padStart(2, '0')}`;
+        history.innerHTML = `已记录：${emoji} (打卡时间 ${timeStr})`;
+        
+        // 增加一点点击反馈动效
+        event.target.style.transform = "scale(1.2)";
+        setTimeout(() => { event.target.style.transform = "scale(1)"; }, 200);
+    }
+</script>
 </head>
 <body>
-  <div class="card">
-    <h1>🐶 莎朗的小天地</h1>
-    <p>欢迎来到专属页面！这里可以放你的介绍、照片墙、日记合集或活动入口 ✨</p>
-    <p>后续你也可以继续扩展这个页面，比如：
-      <br>• 收藏歌单
-      <br>• 每日心情打卡
-      <br>• 粉丝留言板
-    </p>
-  </div>
-  <a class="back" href="index.html">← 返回聊天主页</a>
+
+<div class="container">
+    <header>
+        <h1>欢迎来到 Sarang 的个人空间</h1>
+        <p>后续你也可以继续扩展这个页面，比如：</p>
+    </header>
+
+    <section id="playlist">
+        <h2>🎵 收藏歌单</h2>
+        <div class="playlist-card">
+            <span class="music-icon">💿</span>
+            <div>
+                <strong>深夜治愈系</strong>
+                <p style="margin:0; font-size: 0.9em; color: #666;">陪你度过每一个安静的夜晚</p>
+            </div>
+        </div>
+        <div class="playlist-card">
+            <span class="music-icon">🎸</span>
+            <div>
+                <strong>落日飞车与浪漫</strong>
+                <p style="margin:0; font-size: 0.9em; color: #666;">复古合成器流行乐精选</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="mood">
+        <h2>✨ 每日心情打卡</h2>
+        <div class="mood-tracker">
+            <p>今天的感觉怎么样？</p>
+            <div class="mood-options">
+                <button class="mood-btn" title="开心">😊</button>
+                <button class="mood-btn" title="平静">😐</button>
+                <button class="mood-btn" title="疲惫">😴</button>
+                <button class="mood-btn" title="干劲十足">🔥</button>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script>
+    // 简单的交互示例：点击心情按钮弹出反馈
+    document.querySelectorAll('.mood-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            alert(`已记录你今天的心情：${btn.innerText}！要继续加油哦~`);
+        });
+    });
+</script>
+
 </body>
 </html>
