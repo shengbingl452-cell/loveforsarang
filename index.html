@@ -114,7 +114,7 @@ h1 { font-size: 32px; margin-bottom: 5px; text-shadow: 2px 2px 0px #fff; }
 @keyframes chew { 0%, 100% { transform: translateY(-20px) scale(1.1); } 50% { transform: translateY(-25px) scale(1.15) rotate(2deg); } }
 
 #snack { position: fixed; right: 25px; bottom: 25px; width: 60px; height: 60px; border-radius: 50%; border: 4px solid var(--border-color); background: var(--accent-yellow); font-size: 28px; cursor: pointer; box-shadow: 4px 4px 0px var(--border-color); z-index: 1000; }
-.bgm-toggle { position: fixed; left: 20px; bottom: 25px; height: 46px; min-width: 90px; padding: 0 12px; border-radius: 23px; border: 3px solid var(--border-color); background: #fff; font-size: 13px; cursor: pointer; box-shadow: 3px 3px 0px var(--border-color); z-index: 1000; }
+.bgm-toggle { position: fixed; left: 20px; bottom: 25px; width: 46px; height: 46px; border-radius: 50%; border: 3px solid var(--border-color); background: #fff; font-size: 20px; cursor: pointer; box-shadow: 3px 3px 0px var(--border-color); z-index: 1000; }
 .bgm-toggle.playing { background: var(--accent-pink); color: #fff; }
 
 .mini-watermark { position: fixed; bottom: 8px; left: 50%; transform: translateX(-50%); font-size: 11px; color: #7a5537; opacity: 0.2; pointer-events: none; }
@@ -167,11 +167,9 @@ h1 { font-size: 32px; margin-bottom: 5px; text-shadow: 2px 2px 0px #fff; }
 </div>
 
 <button id="snack">🍪</button>
-<button id="bgm-toggle" class="bgm-toggle" aria-label="Toggle background music">播放 ▶️</button>
+<button id="bgm-toggle" class="bgm-toggle" aria-label="Toggle background music">⏸️</button>
 <div class="mini-watermark">allforsarang ---特别致谢onlysarangu🐾</div>
 <audio id="bgm" src="assets/bgm.mp3" loop></audio>
-<audio id="love-sfx" src="assets/love.mp3" preload="auto"></audio>
-<audio id="miss-sfx" src="assets/miss.mp3" preload="auto"></audio>
 
 <script>
 // --- 语言包 ---
@@ -191,9 +189,7 @@ const i18n = {
         diary_l: "莎朗的小日记：",
         diaries: ["今天天空很好看。", "想去海边。", "芒果味夏天。"],
         error: "Sarang 出错了...",
-        pet_touch: ["汪！好舒服~", "摸摸头真开心✨", "最喜欢你了！", "我想你了~"],
-        pet_favorite: "最喜欢你了！",
-        pet_miss: "我想你了~",
+        pet_touch: ["汪！好舒服~", "我想你了", "最喜欢你了！"],
         pet_eat: "吧唧吧唧... 超级好吃！🍪",
         pet_sleep: "Zzz... 呼...",
         pet_listen: "嗯嗯，在听呢..."
@@ -213,9 +209,7 @@ const i18n = {
         diary_l: "Sarang's Diary:",
         diaries: ["The sky looks lovely today.", "I want to go to the sea.", "Mango-flavored summer."],
         error: "Sarang error...",
-        pet_touch: ["Woof! Feels good~", "Petting me? ✨", "I love you!", "I miss you~"],
-        pet_favorite: "I love you!",
-        pet_miss: "I miss you~",
+        pet_touch: ["Woof! Feels good~", "I miss you!", "I love you!"],
         pet_eat: "Munch munch... Best cookie! 🍪",
         pet_sleep: "Zzz... Hooo...",
         pet_listen: "Hmm, I'm listening..."
@@ -235,9 +229,7 @@ const i18n = {
         diary_l: "사랑이의 일기:",
         diaries: ["오늘 하늘이 참 예뻐.", "바다에 가고 싶어.", "망고맛 여름."],
         error: "사랑이 오류...",
-        pet_touch: ["멍멍! 기분 좋아~", "지금 나 쓰다듬는 거야? ✨", "네가 제일 좋아!", "보고 싶었어~"],
-        pet_favorite: "네가 제일 좋아!",
-        pet_miss: "보고 싶었어~",
+        pet_touch: ["멍멍! 기분 좋아~", "보고 싶었어", "네가 제일 좋아!"],
         pet_eat: "냠냠... 진짜 맛있다! 🍪",
         pet_sleep: "쿨쿨... 드렁...",
         pet_listen: "응응, 듣고 있어..."
@@ -250,8 +242,6 @@ const chatEl = document.getElementById("chat"), inputEl = document.getElementByI
 const petWrapper = document.getElementById('pet-wrapper');
 const bgm = document.getElementById('bgm');
 const bgmToggle = document.getElementById('bgm-toggle');
-const loveSfx = document.getElementById('love-sfx');
-const missSfx = document.getElementById('miss-sfx');
 let idleTimer;
 let isDragging = false;
 let dragOffsetX = 0;
@@ -344,15 +334,7 @@ inputEl.addEventListener('input', () => {
 
 petContainer.onclick = () => {
     wakeUp(); const t = i18n[currentLang];
-    const phrase = t.pet_touch[Math.floor(Math.random() * t.pet_touch.length)];
-    sarangTalk(phrase);
-    if (phrase === t.pet_favorite) {
-        loveSfx.currentTime = 0;
-        loveSfx.play().catch(() => {});
-    } else if (phrase === t.pet_miss) {
-        missSfx.currentTime = 0;
-        missSfx.play().catch(() => {});
-    }
+    sarangTalk(t.pet_touch[Math.floor(Math.random() * t.pet_touch.length)]);
     petContainer.style.transform = "scale(1.2)"; setTimeout(() => petContainer.style.transform="scale(1)", 200);
 };
 
@@ -394,12 +376,10 @@ bgmToggle.onclick = async () => {
         try {
             await bgm.play();
             bgmToggle.classList.add('playing');
-            bgmToggle.innerText = "暂停 ⏸️";
         } catch (_) {}
     } else {
         bgm.pause();
         bgmToggle.classList.remove('playing');
-        bgmToggle.innerText = "播放 ▶️";
     }
 };
 
