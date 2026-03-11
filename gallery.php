@@ -85,26 +85,22 @@
         <p id="status" style="font-size:12px; margin-top:10px;"></p>
     </div>
 
-    <div class="photo-wall">
-        <?php
-        $files = glob("uploads/*.{jpg,jpeg,png,gif}", GLOB_BRACE);
-        // 按上传时间排序（最新的在前）
-        usort($files, function($a, $b) { return filemtime($b) - filemtime($a); });
-        
-        foreach ($files as $file) {
-            echo '<div class="polaroid" onclick="zoomImg(this)">';
-            echo '<img src="'.$file.'">';
-            echo '</div>';
-        }
-        ?>
-    </div>
+    <div class="photo-wall"></div>
 </div>
 
 <div id="overlay" onclick="this.style.display='none'"><img id="fullImg"></div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
     const fileInput = document.getElementById('fileInput');
     const status = document.getElementById('status');
+    const photoWall = document.querySelector('.photo-wall');
+    const { createClient } = supabase;
+    const SUPABASE_URL = "https://gzhsvctnisnoimiddoia.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_Gs2YXmsg_2RRgyuVABP9Ww_1zbSjw5N";
+    const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const BUCKET = "sarang";
+    const FOLDER = "public";
     const i18n = {
         zh: {
             title: "莎朗的云端相册 ☁️",
@@ -151,26 +147,46 @@
         document.getElementById('upload-btn').innerText = t.upload_btn;
     }
 
+    async function uploadFile(file) {
+        const safeName = file.name.replace(/\s+/g, "_");
+        const filePath = `${FOLDER}/${Date.now()}_${safeName}`;
+        const { error } = await sb.storage.from(BUCKET).upload(filePath, file, { upsert: false });
+        if (error) throw error;
+    }
+
+    async function listPhotos() {
+        const { data, error } = await sb.storage.from(BUCKET).list(FOLDER, {
+            limit: 100,
+            offset: 0,
+            sortBy: { column: "created_at", order: "desc" }
+        });
+        if (error) throw error;
+
+        photoWall.innerHTML = "";
+        data.forEach((item) => {
+            const path = `${FOLDER}/${item.name}`;
+            const { data: pub } = sb.storage.from(BUCKET).getPublicUrl(path);
+            const div = document.createElement("div");
+            div.className = "polaroid";
+            div.onclick = () => zoomImg(div);
+            div.innerHTML = `<img src="${pub.publicUrl}">`;
+            photoWall.appendChild(div);
+        });
+    }
+
     fileInput.onchange = async function() {
         const file = this.files[0];
         if (!file) return;
 
         const t = i18n[currentLang];
         status.innerText = t.uploading;
-        const formData = new FormData();
-        formData.append('photo', file);
 
         try {
-            const res = await fetch('upload.php', { method: 'POST', body: formData });
-            const data = await res.json();
-            if (data.status === 'success') {
-                status.innerText = t.success;
-                setTimeout(() => location.reload(), 800);
-            } else {
-                status.innerText = t.fail.replace('{msg}', data.message);
-            }
+            await uploadFile(file);
+            status.innerText = t.success;
+            await listPhotos();
         } catch (err) {
-            status.innerText = t.error;
+            status.innerText = t.fail.replace('{msg}', err.message || "upload error");
         }
     };
 
@@ -182,6 +198,7 @@
     }
 
     changeLang(currentLang);
+    listPhotos();
 </script>
 
 </body>
