@@ -18,7 +18,8 @@ COPY . /var/www/html/
 # 4. 设置权限，确保 Apache 可以读取文件
 RUN chown -R www-data:www-data /var/www/html/
 
-# 5. 暴露 80 端口
-EXPOSE 80
+# 5. Render 会注入 PORT 环境变量，Apache 需要监听它
+ENV PORT=10000
 
-# Apache 会自动启动，不需要额外的 CMD
+# 6. 启动前把 Apache 端口改成 $PORT
+CMD ["bash", "-c", "sed -i \"s/Listen 80/Listen ${PORT}/\" /etc/apache2/ports.conf && sed -i \"s/:80>/:${PORT}>/\" /etc/apache2/sites-available/000-default.conf && apache2-foreground"]
